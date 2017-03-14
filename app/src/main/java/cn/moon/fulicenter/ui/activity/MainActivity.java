@@ -1,7 +1,9 @@
-package cn.moon.fulicenter;
+package cn.moon.fulicenter.ui.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import cn.moon.fulicenter.R;
 
 public class MainActivity extends AppCompatActivity {
 
