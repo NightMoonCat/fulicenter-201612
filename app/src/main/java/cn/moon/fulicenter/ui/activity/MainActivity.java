@@ -11,6 +11,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import cn.moon.fulicenter.R;
+import cn.moon.fulicenter.ui.fragment.NewGoodsFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,6 +36,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         bind = ButterKnife.bind(this);
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.layout_content, new NewGoodsFragment())
+                .commit();
     }
 
     public void onCheckedChange(View view) {
