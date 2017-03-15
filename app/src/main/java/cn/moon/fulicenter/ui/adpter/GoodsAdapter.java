@@ -7,12 +7,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.moon.fulicenter.R;
 import cn.moon.fulicenter.model.bean.NewGoodsBean;
+import cn.moon.fulicenter.model.utils.ImageLoader;
 
 /**
  * Created by Moon on 2017/3/15.
@@ -39,6 +41,7 @@ public class GoodsAdapter extends RecyclerView.Adapter {
         NewGoodsBean bean = mList.get(position);
         holder.tvGoodsName.setText(bean.getGoodsName());
         holder.tvPrice.setText(bean.getShopPrice());
+        ImageLoader.downloadImg(mContext,holder.ivGoodsThumb,bean.getGoodsThumb());
     }
 
     @Override
