@@ -100,6 +100,16 @@ public class NewGoodsFragment extends Fragment {
 
     private void initView() {
         mLayoutManager = new GridLayoutManager(getActivity(), I.COLUM_NUM);
+        //设置footer显示的文字居中
+        mLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                if (position == mList.size()) {
+                    return 2;
+                }
+                return 1;
+            }
+        });
         mRvGoods.setLayoutManager(mLayoutManager);
         mRvGoods.setHasFixedSize(true);
         mSwipeRefreshLayout.setColorSchemeColors(
