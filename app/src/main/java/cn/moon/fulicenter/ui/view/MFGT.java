@@ -8,6 +8,7 @@ import cn.moon.fulicenter.R;
 import cn.moon.fulicenter.application.I;
 import cn.moon.fulicenter.model.bean.BoutiqueBean;
 import cn.moon.fulicenter.ui.activity.BoutiqueChildActivity;
+import cn.moon.fulicenter.ui.activity.GoodsDetailsActivity;
 import cn.moon.fulicenter.ui.activity.MainActivity;
 
 /**
@@ -39,5 +40,12 @@ public class MFGT {
                 .putExtra(I.NewAndBoutiqueGoods.CAT_ID, bean.getId())
                 .putExtra(I.Boutique.TITLE, bean.getTitle()));
     }
+
+    public static void gotoGoodsDetails(Context activity, int goodsId) {
+        activity.startActivity(new Intent(activity, GoodsDetailsActivity.class)
+                .putExtra(I.Goods.KEY_GOODS_ID,goodsId));
+
+    }
+
 
 }

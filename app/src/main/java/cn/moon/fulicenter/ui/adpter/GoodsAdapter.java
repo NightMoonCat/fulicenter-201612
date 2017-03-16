@@ -1,6 +1,7 @@
 package cn.moon.fulicenter.ui.adpter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,8 @@ import cn.moon.fulicenter.R;
 import cn.moon.fulicenter.application.I;
 import cn.moon.fulicenter.model.bean.NewGoodsBean;
 import cn.moon.fulicenter.model.utils.ImageLoader;
+import cn.moon.fulicenter.ui.activity.GoodsDetailsActivity;
+import cn.moon.fulicenter.ui.view.MFGT;
 
 /**
  * Created by Moon on 2017/3/15.
@@ -71,10 +74,16 @@ public class GoodsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             return;
         }
         GoodsViewHolder holder = (GoodsViewHolder) parentHolder;
-        NewGoodsBean bean = mList.get(position);
+        final NewGoodsBean bean = mList.get(position);
         holder.tvGoodsName.setText(bean.getGoodsName());
         holder.tvPrice.setText(bean.getCurrencyPrice());
         ImageLoader.downloadImg(mContext, holder.ivGoodsThumb, bean.getGoodsThumb());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MFGT.gotoGoodsDetails(mContext,bean.getGoodsId());
+            }
+        });
     }
 
     @Override
