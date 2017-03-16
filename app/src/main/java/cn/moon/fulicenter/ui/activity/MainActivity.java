@@ -13,6 +13,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import cn.moon.fulicenter.R;
 import cn.moon.fulicenter.ui.fragment.BoutiqueFragment;
+import cn.moon.fulicenter.ui.fragment.CategoryFragment;
 import cn.moon.fulicenter.ui.fragment.NewGoodsFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     Fragment[] mFragments;
     NewGoodsFragment mNewGoodsFragment;
     BoutiqueFragment mBoutiqueFragment;
+    CategoryFragment mCategoryFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.layout_content,mNewGoodsFragment)
                 .add(R.id.layout_content,mBoutiqueFragment)
+//                .add(R.id.layout_content,mCategoryFragment)
                 .hide(mBoutiqueFragment)
                 .show(mNewGoodsFragment)
                 .commit();
@@ -57,8 +60,11 @@ public class MainActivity extends AppCompatActivity {
         mFragments = new Fragment[5];
         mNewGoodsFragment = new NewGoodsFragment();
         mBoutiqueFragment = new BoutiqueFragment();
+        mCategoryFragment = new CategoryFragment();
+
         mFragments[0] = mNewGoodsFragment;
         mFragments[1] = mBoutiqueFragment;
+        mFragments[2] = mCategoryFragment;
 
     }
 
@@ -69,6 +75,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.btnBoutique:
                 index = 1;
+                break;
+            case R.id.btnCategory:
+                index = 2;
                 break;
         }
         setFragment();
