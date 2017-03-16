@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import cn.moon.fulicenter.R;
+import cn.moon.fulicenter.ui.view.MFGT;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -21,8 +22,11 @@ public class SplashActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                startActivity(new Intent(SplashActivity.this, MainActivity.class));
-                SplashActivity.this.finish();
+//                startActivity(new Intent(SplashActivity.this, MainActivity.class));
+//                SplashActivity.this.finish();
+
+                MFGT.gotoMain(SplashActivity.this);
+                MFGT.finish(SplashActivity.this);
             }
         }, 2000);
     }

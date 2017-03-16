@@ -13,6 +13,7 @@ import butterknife.ButterKnife;
 import cn.moon.fulicenter.R;
 import cn.moon.fulicenter.application.I;
 import cn.moon.fulicenter.ui.fragment.NewGoodsFragment;
+import cn.moon.fulicenter.ui.view.MFGT;
 
 public class BoutiqueChildActivity extends AppCompatActivity {
 
@@ -37,6 +38,6 @@ public class BoutiqueChildActivity extends AppCompatActivity {
     }
 
     public void onBack(View view) {
-        finish();
+        MFGT.finish(BoutiqueChildActivity.this);
     }
 }
