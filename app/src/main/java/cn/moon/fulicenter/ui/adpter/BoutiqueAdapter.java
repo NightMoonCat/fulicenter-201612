@@ -50,11 +50,13 @@ public class BoutiqueAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         holder.mTvBoutiqueName.setText(bean.getName());
         holder.mTvBoutiqueDescription.setText(bean.getDescription());
         ImageLoader.downloadImg(mContext, holder.mIvBoutiqueImg, bean.getImageurl());
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mContext.startActivity(new Intent(mContext,BoutiqueChildActivity.class)
-                        .putExtra(I.NewAndBoutiqueGoods.CAT_ID,bean.getId()));
+                        .putExtra(I.NewAndBoutiqueGoods.CAT_ID,bean.getId())
+                        .putExtra(I.Boutique.TITLE,bean.getTitle()));
             }
         });
     }

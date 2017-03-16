@@ -50,6 +50,8 @@ public class NewGoodsFragment extends Fragment {
     @BindView(R.id.rvGoods)
     RecyclerView mRvGoods;
 
+    int catId = 0;
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.fragment_new_goods, container, false);
@@ -62,6 +64,7 @@ public class NewGoodsFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mModel = new NewGoodsModel();
         initView();
+        catId = getActivity().getIntent().getIntExtra(I.NewAndBoutiqueGoods.CAT_ID,catId);
         initData(I.ACTION_DOWNLOAD);
         setListener();
     }
@@ -123,7 +126,7 @@ public class NewGoodsFragment extends Fragment {
     }
 
     private void initData(final int action) {
-        mModel.loadData(getActivity(), mPageId, new OnCompleteListener<NewGoodsBean[]>() {
+        mModel.loadData(getActivity(),catId, mPageId, new OnCompleteListener<NewGoodsBean[]>() {
             @Override
             public void onSuccess(NewGoodsBean[] result) {
                 setRefresh(false);
