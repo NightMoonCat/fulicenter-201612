@@ -4,24 +4,40 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import cn.moon.fulicenter.R;
 import cn.moon.fulicenter.model.bean.CategoryChildBean;
 import cn.moon.fulicenter.model.bean.CategoryGroupBean;
+import cn.moon.fulicenter.model.utils.ImageLoader;
 
 /**
  * Created by Moon on 2017/3/16.
  */
 
 public class CategoryAdapter extends BaseExpandableListAdapter {
-
-
     Context mContext;
     List<CategoryGroupBean> mCategoryGroupList;
     List<List<CategoryChildBean>> mCategoryChildList;
 
+    public void setCategoryGroupList(List<CategoryGroupBean> categoryGroupList) {
+        mCategoryGroupList = categoryGroupList;
+    }
+
+    public void setCategoryChildList(List<List<CategoryChildBean>> categoryChildList) {
+        mCategoryChildList = categoryChildList;
+    }
+    //    public CategoryAdapter(Context context, List<CategoryGroupBean> categoryGroupList, List<List<CategoryChildBean>> categoryChildList) {
+//        mContext = context;
+//        mCategoryGroupList = categoryGroupList;
+//        mCategoryChildList = categoryChildList;
+//    }
 
     public CategoryAdapter(Context context) {
         mCategoryGroupList = new ArrayList<>();
@@ -66,20 +82,69 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public View getGroupView(int groupPosition,
-                             boolean isExpand, View convertView, ViewGroup parent) {
+    public View getGroupView(int groupPosition, boolean isExpand,
+                             View convertView, ViewGroup parent) {
+        GroupViewHolder holder;
+        if (convertView == null) {
+            convertView = View.inflate(mContext, R.layout.item_category_group, null);
+            holder = new GroupViewHolder(convertView);
+            convertView.setTag(holder);
+        } else {
+            holder = (GroupViewHolder) convertView.getTag();
+        }
 
-
-        return null;
+        ImageLoader.downloadImg(mContext, holder.mIvGroupIcon, mCategoryGroupList.get(groupPosition).getImageUrl());
+        holder.mTvGroupName.setText(mCategoryGroupList.get(groupPosition).getName());
+        if (isExpand) {
+            holder.mIvExpand.setImageResource(R.mipmap.expand_off);
+        } else {
+            holder.mIvExpand.setImageResource(R.mipmap.expand_on);
+        }
+        return convertView;
     }
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        return null;
+        ChildViewHolder holder;
+        if (convertView == null) {
+            convertView = View.inflate(mContext, R.layout.item_category_child, null);
+            holder = new ChildViewHolder(convertView);
+            convertView.setTag(holder);
+        } else {
+            holder = (ChildViewHolder) convertView.getTag();
+        }
+        ImageLoader.downloadImg(mContext, holder.mIvChildIcon,
+                mCategoryChildList.get(groupPosition).get(childPosition).getImageUrl());
+        holder.mTvChildName.setText(mCategoryChildList.get(groupPosition).get(childPosition).getName());
+        return convertView;
     }
 
     @Override
-    public boolean isChildSelectable(int i, int i1) {
+    public boolean isChildSelectable(int groupPosition, int childPosition) {
         return false;
+    }
+
+    static class GroupViewHolder {
+        @BindView(R.id.ivGroupIcon)
+        ImageView mIvGroupIcon;
+        @BindView(R.id.tvGroupName)
+        TextView mTvGroupName;
+        @BindView(R.id.ivExpand)
+        ImageView mIvExpand;
+
+        GroupViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
+    }
+
+    static class ChildViewHolder {
+        @BindView(R.id.ivChildIcon)
+        ImageView mIvChildIcon;
+        @BindView(R.id.tvChildName)
+        TextView mTvChildName;
+
+        ChildViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
     }
 }

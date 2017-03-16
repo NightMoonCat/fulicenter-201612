@@ -9,6 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.moon.fulicenter.R;
@@ -17,6 +20,8 @@ import cn.moon.fulicenter.model.bean.CategoryGroupBean;
 import cn.moon.fulicenter.model.net.CategoryModel;
 import cn.moon.fulicenter.model.net.ICategoryModel;
 import cn.moon.fulicenter.model.net.OnCompleteListener;
+import cn.moon.fulicenter.model.utils.ResultUtils;
+import cn.moon.fulicenter.ui.adpter.CategoryAdapter;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,6 +31,7 @@ public class CategoryFragment extends Fragment {
 
     @BindView(R.id.elvCategory)
     ExpandableListView mElvCategory;
+    CategoryAdapter mAdapter = new CategoryAdapter(getContext());
 
     ICategoryModel mModel;
     @Override
@@ -41,6 +47,7 @@ public class CategoryFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mModel = new CategoryModel();
         loadGroupData();
+        mElvCategory.setAdapter(mAdapter);
 
     }
 
@@ -48,7 +55,9 @@ public class CategoryFragment extends Fragment {
         mModel.loadGroupData(getContext(), new OnCompleteListener<CategoryGroupBean[]>() {
             @Override
             public void onSuccess(CategoryGroupBean[] result) {
+                if (result != null && result.length > 0) {
 
+                }
             }
 
             @Override
