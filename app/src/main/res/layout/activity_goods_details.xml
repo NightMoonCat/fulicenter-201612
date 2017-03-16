@@ -1,48 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_goods_detail"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:background="@color/good_detail_bg"
+    >
+    <RelativeLayout
+        android:id="@+id/layout_title"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:background="@color/main_orange">
+        <include layout="@layout/common_head_title"/>
+        <ImageView
+            android:id="@+id/iv_good_share"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:padding="5dp"
+            android:src="@drawable/selector_share_bg"/>
+        <ImageView
+            android:id="@+id/iv_good_collect"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@+id/iv_good_share"
+            android:padding="5dp"
+            android:src="@mipmap/bg_collect_in"/>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@+id/iv_good_collect">
 
-    <TextView
-        android:id="@+id/tvGoodsEnglishName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:text="英文价格"
-        android:textSize="30sp"/>
+            <ImageView
+                android:id="@+id/iv_good_cart"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:padding="5dp"
+                android:src="@mipmap/bg_cart_selected"/>
+            <TextView
+                android:id="@+id/tv_cart_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#f00"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"/>
+        </RelativeLayout>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/layout_banner"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="25dp"
+        android:background="@color/good_detail_bg_white"
+        android:layout_below="@+id/layout_title">
+        <TextView
+            android:id="@+id/tv_good_name_english"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:textColor="@color/black"/>
+        <TextView
+            android:id="@+id/tv_good_name"
+            android:layout_below="@+id/tv_good_name_english"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:textColor="@color/black" />
+        <TextView
+            android:id="@+id/tv_good_price_shop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/good_detail_currency_price" />
+        <TextView
+            android:id="@+id/tv_good_price_current"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_below="@+id/tv_good_price_shop"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/good_detail_currency_price" />
+        <RelativeLayout
+            android:id="@+id/layout_image"
+            android:layout_width="wrap_content"
+            android:layout_height="190dp"
+            android:layout_marginTop="50dp"
+            android:layout_below="@+id/tv_good_price_current">
+            <cn.moon.fulicenter.ui.view.SlideAutoLoopView
+                android:id="@+id/salv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/good_detail_bg_white" />
 
-    <TextView
-        android:id="@+id/tvCurrentPrice"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="50dp"
-        android:layout_toRightOf="@+id/tvGoodsEnglishName"
-        android:gravity="right"
-        android:text="￥256"
-        android:textSize="30sp"/>
+            <cn.moon.fulicenter.ui.view.FlowIndicator
+                android:id="@+id/indicator"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                app:count="4"
+                app:focus="0"
+                app:focus_color="@color/good_detaul_flow_indicator_focus"
+                app:normal_color="#a1d1d1d1"
+                app:r="5dp"
+                app:space="3dp" />
 
-    <TextView
-        android:layout_marginTop="20dp"
-        android:id="@+id/tvGoodsChineseName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvGoodsEnglishName"
-        android:text="中文价格"
-        android:textSize="30sp"/>
-
-    <TextView
-        android:layout_marginTop="20dp"
-        android:id="@+id/tvSalePrice"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@id/tvCurrentPrice"
-        android:gravity="right"
-        android:paddingLeft="150sp"
-        android:text="￥256"
-        android:textSize="30sp"/>
-
+        </RelativeLayout>
+        <WebView
+            android:id="@+id/wv_good_brief"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/layout_image"
+            android:layout_margin="10dp"
+            android:background="@color/good_detail_bg_white" />
+    </RelativeLayout>
 </RelativeLayout>
