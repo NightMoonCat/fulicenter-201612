@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -24,15 +23,12 @@ import cn.moon.fulicenter.application.I;
 import cn.moon.fulicenter.model.bean.BoutiqueBean;
 import cn.moon.fulicenter.model.net.BoutiqueModel;
 import cn.moon.fulicenter.model.net.IBoutiqueModel;
-import cn.moon.fulicenter.model.net.INewGoodsModel;
-import cn.moon.fulicenter.model.net.NewGoodsModel;
 import cn.moon.fulicenter.model.net.OnCompleteListener;
 import cn.moon.fulicenter.model.utils.CommonUtils;
 import cn.moon.fulicenter.model.utils.ImageLoader;
 import cn.moon.fulicenter.model.utils.ResultUtils;
 import cn.moon.fulicenter.ui.adpter.BoutiqueAdapter;
-import cn.moon.fulicenter.ui.adpter.GoodsAdapter;
-import cn.moon.fulicenter.ui.widget.SpaceItemDecoration;
+import cn.moon.fulicenter.ui.view.SpaceItemDecoration;
 
 /**
  * Created by Moon on 2017/3/15.
@@ -42,7 +38,6 @@ public class BoutiqueFragment extends Fragment {
     private static final String TAG = "BoutiqueFragment";
 
     IBoutiqueModel mModel;
-    int mPageId = 1;
     Unbinder bind;
     List<BoutiqueBean> mList = new ArrayList<>();
     LinearLayoutManager mLayoutManager;
@@ -66,28 +61,14 @@ public class BoutiqueFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mModel = new BoutiqueModel();
         initView();
-        initData(I.ACTION_DOWNLOAD);
+        initData();
         setListener();
     }
 
     private void setListener() {
         setPullDownListener();
-        setPullUpListener();
     }
 
-    private void setPullUpListener() {
-        mRvGoods.setOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                int lastLocation = mLayoutManager.findLastVisibleItemPosition();
-                if (mAdapter.isMore() && lastLocation == mAdapter.getItemCount() - 1 && newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    mPageId++;
-                    initData(I.ACTION_PULL_UP);
-                }
-            }
-        });
-    }
 
     private void setPullDownListener() {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -95,8 +76,7 @@ public class BoutiqueFragment extends Fragment {
             public void onRefresh() {
                 ImageLoader.release();
                 setRefresh(true);
-                mPageId = 1;
-                initData(I.ACTION_PULL_DOWN);
+                initData();
             }
         });
     }
@@ -117,22 +97,16 @@ public class BoutiqueFragment extends Fragment {
         mRvGoods.setAdapter(mAdapter);
     }
 
-    private void initData(final int action) {
+    private void initData() {
         mModel.loadData(getActivity(), new OnCompleteListener<BoutiqueBean[]>() {
             @Override
             public void onSuccess(BoutiqueBean[] result) {
                 setRefresh(false);
-                mAdapter.setMore(true);
                 if (result != null && result.length > 0) {
                     Log.e(TAG, result.length + "");
                     ArrayList<BoutiqueBean> list = ResultUtils.array2List(result);
-                    if (action == I.ACTION_DOWNLOAD || action == I.ACTION_PULL_DOWN) {
-                        mList.clear();
-                    }
+                    mList.clear();
                     mList.addAll(list);
-                    if (list.size() < I.PAGE_SIZE_DEFAULT) {
-                        mAdapter.setMore(false);
-                    }
                     mAdapter.notifyDataSetChanged();
                 }
 
