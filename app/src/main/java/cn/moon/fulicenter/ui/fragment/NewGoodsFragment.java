@@ -28,7 +28,7 @@ import cn.moon.fulicenter.model.utils.CommonUtils;
 import cn.moon.fulicenter.model.utils.ImageLoader;
 import cn.moon.fulicenter.model.utils.ResultUtils;
 import cn.moon.fulicenter.ui.adpter.GoodsAdapter;
-import cn.moon.fulicenter.ui.widget.SpaceItemDecoration;
+import cn.moon.fulicenter.ui.view.SpaceItemDecoration;
 
 /**
  * Created by Moon on 2017/3/15.
