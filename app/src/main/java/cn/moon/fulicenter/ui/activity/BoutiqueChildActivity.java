@@ -24,7 +24,7 @@ public class BoutiqueChildActivity extends AppCompatActivity {
     LinearLayout mSrl;
     FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
     NewGoodsFragment newGoodsFragment = new NewGoodsFragment();
-    @BindView(R.id.tvTitle)
+    @BindView(R.id.btnTitle)
     TextView mTvTitle;
 
     @Override

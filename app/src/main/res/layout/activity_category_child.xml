@@ -14,10 +14,14 @@
             android:layout_width="wrap_content"
             android:src="@drawable/back"
             android:layout_height="match_parent"/>
-        <TextView
-            android:id="@+id/tvTitle"
+        <cn.moon.fulicenter.ui.view.CatFilterCategoryButton
+            android:id="@+id/btnTitle"
+            android:background="#0000"
+            android:drawableRight="@drawable/arrow2_up"
             android:text="不一样的特性"
             android:gravity="center_vertical"
+            android:layout_marginLeft="60dp"
+            android:layout_gravity="center_horizontal"
             android:textSize="25sp"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"/>

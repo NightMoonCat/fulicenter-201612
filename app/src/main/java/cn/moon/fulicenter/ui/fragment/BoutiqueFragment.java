@@ -122,8 +122,13 @@ public class BoutiqueFragment extends Fragment {
     }
 
     private void setRefresh(boolean refresh) {
-        mSwipeRefreshLayout.setRefreshing(refresh);
-        mTvRefreshHint.setVisibility(refresh ? View.VISIBLE : View.GONE);
+        if (mSwipeRefreshLayout != null) {
+            mSwipeRefreshLayout.setRefreshing(refresh);
+        }
+        if (mTvRefreshHint != null) {
+            mTvRefreshHint.setVisibility(refresh ? View.VISIBLE : View.GONE);
+
+        }
     }
 
     @Override
