@@ -49,8 +49,9 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.layout_content,mNewGoodsFragment)
                 .add(R.id.layout_content,mBoutiqueFragment)
-//                .add(R.id.layout_content,mCategoryFragment)
+                .add(R.id.layout_content,mCategoryFragment)
                 .hide(mBoutiqueFragment)
+                .hide(mCategoryFragment)
                 .show(mNewGoodsFragment)
                 .commit();
 
