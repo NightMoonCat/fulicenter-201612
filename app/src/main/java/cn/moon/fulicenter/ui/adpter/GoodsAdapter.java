@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -29,6 +31,8 @@ public class GoodsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     Context mContext;
     List<NewGoodsBean> mList;
+
+    int sortBy = I.SORT_BY_ADDTIME_DESC;
     @BindView(R.id.tvFooter)
     TextView mtvFooter;
 
@@ -36,6 +40,42 @@ public class GoodsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         this.mtvFooter = mtvFooter;
         notifyDataSetChanged();
     }
+
+    public void setSortBy(int sortBy) {
+        this.sortBy = sortBy;
+        sortBy();
+    }
+
+    private void sortBy() {
+        Collections.sort(mList, new Comparator<NewGoodsBean>() {
+            @Override
+            public int compare(NewGoodsBean l, NewGoodsBean r) {
+                int result = 0;
+                switch (sortBy) {
+                    case I.SORT_BY_ADDTIME_ASC:
+                        result = (int) (l.getAddTime()-r.getAddTime());
+                        break;
+                    case I.SORT_BY_ADDTIME_DESC:
+                        result = (int) (r.getAddTime()-l.getAddTime());
+                        break;
+                    case I.SORT_BY_PRICE_ASC:
+                        result = getPrice(l.getCurrencyPrice())-getPrice(r.getCurrencyPrice());
+                        break;
+                    case I.SORT_BY_PRICE_DESC:
+                        result = getPrice(r.getCurrencyPrice())-getPrice(l.getCurrencyPrice());
+                        break;
+                }
+                return result;
+            }
+        });
+        notifyDataSetChanged();
+    }
+    private int getPrice(String p) {
+        String price = p.substring(p.indexOf("￥")+1);
+        return Integer.valueOf(price);
+    }
+
+
 
     public GoodsAdapter(Context mContext, List<NewGoodsBean> mList) {
         this.mContext = mContext;
