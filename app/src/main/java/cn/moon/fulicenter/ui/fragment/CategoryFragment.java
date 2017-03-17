@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import cn.moon.fulicenter.R;
 import cn.moon.fulicenter.model.bean.CategoryChildBean;
 import cn.moon.fulicenter.model.bean.CategoryGroupBean;
@@ -35,15 +37,27 @@ public class CategoryFragment extends Fragment {
     CategoryAdapter mAdapter;
 
     ICategoryModel mModel;
-
     List<CategoryGroupBean> mGroupList = new ArrayList<>();
     List<List<CategoryChildBean>> mChildList = new ArrayList<>();
+    @BindView(R.id.layout_tips)
+    LinearLayout mLayoutTips;
+
+    View loadView;
+    View loadFail;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_category, container, false);
         ButterKnife.bind(this, view);
+        loadView =  LayoutInflater.from(getContext()).inflate(R.layout.loading,mLayoutTips,false);
+        loadFail =  LayoutInflater.from(getContext()).inflate(R.layout.load_fail,mLayoutTips,false);
+
+//        mLayoutTips.addView(loadView);
+//        mLayoutTips.addView(loadFail);
+//        loadView.setVisibility(View.VISIBLE);
+//        loadFail.setVisibility(View.GONE);
+////        showDialog(true,false);
         return view;
     }
 
@@ -63,20 +77,21 @@ public class CategoryFragment extends Fragment {
             public void onSuccess(CategoryGroupBean[] result) {
                 if (result != null && result.length > 0) {
                     ArrayList<CategoryGroupBean> list = ResultUtils.array2List(result);
-
-
                     mGroupList.clear();
                     mGroupList.addAll(list);
                     for (int i = 0; i < list.size(); i++) {
                         mChildList.add(new ArrayList<CategoryChildBean>());
                         loadChildData(list.get(i).getId(), i);
                     }
+
+//                    showDialog(false,true);
                 }
             }
 
             @Override
             public void onError(String error) {
                 Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
+                showDialog(false,false);
             }
         });
     }
@@ -85,20 +100,43 @@ public class CategoryFragment extends Fragment {
         mModel.loadChildData(getContext(), parentId, new OnCompleteListener<CategoryChildBean[]>() {
             @Override
             public void onSuccess(CategoryChildBean[] result) {
-                loadIndex ++;
+                loadIndex++;
                 if (result != null && result.length > 0) {
                     ArrayList<CategoryChildBean> list = ResultUtils.array2List(result);
                     mChildList.set(index, list);
                 }
                 if (loadIndex == mGroupList.size()) {
                     mAdapter.initData(mGroupList, mChildList);
+//                    showDialog(false,true);
                 }
             }
 
             @Override
             public void onError(String error) {
-                loadIndex ++;
+                loadIndex++;
+                showDialog(false,false);
             }
         });
     }
+    @OnClick(R.id.layout_tips)
+    public void loadAgain() {
+        if (loadFail.getVisibility() == View.VISIBLE) {
+            loadGroupData();
+            showDialog(true,false);
+        }
+    }
+
+    private void showDialog(boolean dialog, boolean success) {
+        loadView.setVisibility(dialog?View.VISIBLE:View.GONE);
+        if (dialog) {
+            loadFail.setVisibility(View.GONE);
+            mLayoutTips.setVisibility(View.VISIBLE);
+        } else {
+            mLayoutTips.setVisibility(success?View.GONE:View.VISIBLE);
+            loadFail.setVisibility(success?View.GONE:View.VISIBLE);
+
+        }
+    }
+
+
 }

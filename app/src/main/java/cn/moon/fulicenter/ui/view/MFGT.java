@@ -8,6 +8,7 @@ import cn.moon.fulicenter.R;
 import cn.moon.fulicenter.application.I;
 import cn.moon.fulicenter.model.bean.BoutiqueBean;
 import cn.moon.fulicenter.ui.activity.BoutiqueChildActivity;
+import cn.moon.fulicenter.ui.activity.CategoryChildActivity;
 import cn.moon.fulicenter.ui.activity.GoodsDetailsActivity;
 import cn.moon.fulicenter.ui.activity.MainActivity;
 
@@ -48,4 +49,8 @@ public class MFGT {
     }
 
 
+    public static void gotoCategoryChildActivity(Context context, int goodsId) {
+        context.startActivity(new Intent(context, CategoryChildActivity.class)
+        .putExtra(I.NewAndBoutiqueGoods.CAT_ID,goodsId));
+    }
 }

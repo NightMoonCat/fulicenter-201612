@@ -16,6 +16,7 @@ import cn.moon.fulicenter.R;
 import cn.moon.fulicenter.model.bean.CategoryChildBean;
 import cn.moon.fulicenter.model.bean.CategoryGroupBean;
 import cn.moon.fulicenter.model.utils.ImageLoader;
+import cn.moon.fulicenter.ui.view.MFGT;
 
 /**
  * Created by Moon on 2017/3/16.
@@ -100,9 +101,22 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
         } else {
             holder = (ChildViewHolder) convertView.getTag();
         }
-        ImageLoader.downloadImg(mContext, holder.mIvChildIcon,
-                getChild(groupPosition,childPosition).getImageUrl());
-        holder.mTvChildName.setText( getChild(groupPosition,childPosition).getName());
+
+
+        final CategoryChildBean bean = getChild(groupPosition, childPosition);
+
+        if (bean != null) {
+            ImageLoader.downloadImg(mContext, holder.mIvChildIcon,
+                    bean.getImageUrl());
+            holder.mTvChildName.setText(bean.getName());
+
+            convertView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    MFGT.gotoCategoryChildActivity(mContext,bean.getId());
+                }
+            });
+        }
         return convertView;
     }
 
