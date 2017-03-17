@@ -50,14 +50,14 @@ public class CategoryFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_category, container, false);
         ButterKnife.bind(this, view);
-        loadView =  LayoutInflater.from(getContext()).inflate(R.layout.loading,mLayoutTips,false);
-        loadFail =  LayoutInflater.from(getContext()).inflate(R.layout.load_fail,mLayoutTips,false);
+        loadView = LayoutInflater.from(getContext()).inflate(R.layout.loading, mLayoutTips, false);
+        loadFail = LayoutInflater.from(getContext()).inflate(R.layout.load_fail, mLayoutTips, false);
 
-//        mLayoutTips.addView(loadView);
-//        mLayoutTips.addView(loadFail);
-//        loadView.setVisibility(View.VISIBLE);
-//        loadFail.setVisibility(View.GONE);
-////        showDialog(true,false);
+        mLayoutTips.addView(loadView);
+        mLayoutTips.addView(loadFail);
+        loadView.setVisibility(View.VISIBLE);
+        loadFail.setVisibility(View.GONE);
+        showDialog(true, false);
         return view;
     }
 
@@ -84,14 +84,13 @@ public class CategoryFragment extends Fragment {
                         loadChildData(list.get(i).getId(), i);
                     }
 
-//                    showDialog(false,true);
                 }
             }
 
             @Override
             public void onError(String error) {
                 Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
-                showDialog(false,false);
+                showDialog(false, false);
             }
         });
     }
@@ -107,33 +106,34 @@ public class CategoryFragment extends Fragment {
                 }
                 if (loadIndex == mGroupList.size()) {
                     mAdapter.initData(mGroupList, mChildList);
-//                    showDialog(false,true);
+                    showDialog(false,true);
                 }
             }
 
             @Override
             public void onError(String error) {
                 loadIndex++;
-                showDialog(false,false);
+                showDialog(false, false);
             }
         });
     }
+
     @OnClick(R.id.layout_tips)
     public void loadAgain() {
         if (loadFail.getVisibility() == View.VISIBLE) {
             loadGroupData();
-            showDialog(true,false);
+            showDialog(true, false);
         }
     }
 
     private void showDialog(boolean dialog, boolean success) {
-        loadView.setVisibility(dialog?View.VISIBLE:View.GONE);
+        loadView.setVisibility(dialog ? View.VISIBLE : View.GONE);
         if (dialog) {
             loadFail.setVisibility(View.GONE);
             mLayoutTips.setVisibility(View.VISIBLE);
         } else {
-            mLayoutTips.setVisibility(success?View.GONE:View.VISIBLE);
-            loadFail.setVisibility(success?View.GONE:View.VISIBLE);
+            mLayoutTips.setVisibility(success ? View.GONE : View.VISIBLE);
+            loadFail.setVisibility(success ? View.GONE : View.VISIBLE);
 
         }
     }
