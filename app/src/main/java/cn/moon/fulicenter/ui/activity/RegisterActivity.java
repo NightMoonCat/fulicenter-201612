@@ -1,6 +1,7 @@
 package cn.moon.fulicenter.ui.activity;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -19,6 +20,7 @@ import cn.moon.fulicenter.model.net.IUserModel;
 import cn.moon.fulicenter.model.net.OnCompleteListener;
 import cn.moon.fulicenter.model.net.UserModel;
 import cn.moon.fulicenter.model.utils.CommonUtils;
+import cn.moon.fulicenter.model.utils.MD5;
 import cn.moon.fulicenter.model.utils.ResultUtils;
 import cn.moon.fulicenter.ui.view.MFGT;
 
@@ -77,7 +79,8 @@ public class RegisterActivity extends AppCompatActivity {
     private void register() {
         if (checkInput()) {
             showDialog();
-            mModel.register(RegisterActivity.this, userName, nickName, password, new OnCompleteListener<String>() {
+            mModel.register(RegisterActivity.this, userName, nickName,
+                    MD5.getMessageDigest(password), new OnCompleteListener<String>() {
                 @Override
                 public void onSuccess(String s) {
                     Result result = ResultUtils.getResultFromJson(s, User.class);
@@ -106,6 +109,8 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void registerSuccess() {
+        //设置返回结果
+        setResult(RESULT_OK,new Intent().putExtra(I.User.USER_NAME,userName));
         CommonUtils.showShortToast(R.string.register_success);
         MFGT.finish(RegisterActivity.this);
     }
