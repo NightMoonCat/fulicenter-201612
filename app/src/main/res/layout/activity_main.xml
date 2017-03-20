@@ -36,7 +36,7 @@
             android:textColor="@color/main_botton_text_color" />
 
         <RadioButton
-            android:id="@+id/btnCollect"
+            android:id="@+id/btnCart"
             style="@style/menu_item_style"
             android:button="@null"
             android:drawableTop="@drawable/selector_menu_item_cart"

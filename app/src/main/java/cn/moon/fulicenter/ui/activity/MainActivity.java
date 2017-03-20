@@ -12,9 +12,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import cn.moon.fulicenter.R;
+import cn.moon.fulicenter.application.FuLiCenterApplication;
 import cn.moon.fulicenter.ui.fragment.BoutiqueFragment;
+import cn.moon.fulicenter.ui.fragment.CartFragment;
 import cn.moon.fulicenter.ui.fragment.CategoryFragment;
 import cn.moon.fulicenter.ui.fragment.NewGoodsFragment;
+import cn.moon.fulicenter.ui.fragment.PersonalCenterFragment;
+import cn.moon.fulicenter.ui.view.MFGT;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,8 +29,8 @@ public class MainActivity extends AppCompatActivity {
     RadioButton mBtnBoutique;
     @BindView(R.id.btnCategory)
     RadioButton mBtnCategory;
-    @BindView(R.id.btnCollect)
-    RadioButton mBtnCollect;
+    @BindView(R.id.btnCart)
+    RadioButton mBtnCart;
     @BindView(R.id.btnMe)
     RadioButton mBtnMe;
     @BindView(R.id.layout_menu)
@@ -40,21 +44,39 @@ public class MainActivity extends AppCompatActivity {
     NewGoodsFragment mNewGoodsFragment;
     BoutiqueFragment mBoutiqueFragment;
     CategoryFragment mCategoryFragment;
+    CartFragment mCartFragment;
+    PersonalCenterFragment mPersonalCenterFragment;
+
+    RadioButton[] mRadioButtons;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         bind = ButterKnife.bind(this);
         initFragment();
+        initRadioButton();
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.layout_content,mNewGoodsFragment)
                 .add(R.id.layout_content,mBoutiqueFragment)
                 .add(R.id.layout_content,mCategoryFragment)
+                .add(R.id.layout_content,mCartFragment)
+                .add(R.id.layout_content,mPersonalCenterFragment)
                 .hide(mBoutiqueFragment)
                 .hide(mCategoryFragment)
+                .hide(mPersonalCenterFragment)
+                .hide(mCartFragment)
                 .show(mNewGoodsFragment)
                 .commit();
 
+    }
+
+    private void initRadioButton() {
+        mRadioButtons = new RadioButton[5];
+        mRadioButtons[0] =  mBtnNewGoods;
+        mRadioButtons[1] =  mBtnBoutique;
+        mRadioButtons[2] =  mBtnCategory;
+        mRadioButtons[3] =  mBtnCart;
+        mRadioButtons[4] =  mBtnMe;
     }
 
     private void initFragment() {
@@ -62,11 +84,31 @@ public class MainActivity extends AppCompatActivity {
         mNewGoodsFragment = new NewGoodsFragment();
         mBoutiqueFragment = new BoutiqueFragment();
         mCategoryFragment = new CategoryFragment();
+        mPersonalCenterFragment = new PersonalCenterFragment();
+        mCartFragment = new CartFragment();
 
         mFragments[0] = mNewGoodsFragment;
         mFragments[1] = mBoutiqueFragment;
         mFragments[2] = mCategoryFragment;
+        mFragments[3] = mCartFragment;
+        mFragments[4] = mPersonalCenterFragment;
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setRadioButton();
+    }
+
+    private void setRadioButton() {
+        for (int i = 0;i<mRadioButtons.length;i++) {
+            if (i == currentIndex) {
+                mRadioButtons[i].setChecked(true);
+            } else {
+                mRadioButtons[i].setChecked(false);
+            }
+        }
     }
 
     public void onCheckedChange(View view) {
@@ -79,6 +121,20 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.btnCategory:
                 index = 2;
+                break;
+            case R.id.btnCart:
+                if (FuLiCenterApplication.getCurrentUser() != null) {
+                    index = 3;
+                } else {
+                    MFGT.gotoLogin(MainActivity.this);
+                }
+                break;
+            case R.id.btnMe:
+                if (FuLiCenterApplication.getCurrentUser() != null) {
+                    index = 4;
+                } else {
+                    MFGT.gotoLogin(MainActivity.this);
+                }
                 break;
         }
         setFragment();

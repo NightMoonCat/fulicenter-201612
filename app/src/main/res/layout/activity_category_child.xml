@@ -15,7 +15,7 @@
             android:src="@drawable/back"
             android:layout_height="match_parent"/>
         <cn.moon.fulicenter.ui.view.CatFilterCategoryButton
-            android:id="@+id/btnTitle"
+            android:id="@+id/tvTitle"
             android:background="#0000"
             android:drawableRight="@drawable/arrow2_up"
             android:text="不一样的特性"

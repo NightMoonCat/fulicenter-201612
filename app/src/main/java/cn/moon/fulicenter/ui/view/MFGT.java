@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import cn.moon.fulicenter.R;
 import cn.moon.fulicenter.application.I;
@@ -14,7 +13,9 @@ import cn.moon.fulicenter.model.bean.CategoryChildBean;
 import cn.moon.fulicenter.ui.activity.BoutiqueChildActivity;
 import cn.moon.fulicenter.ui.activity.CategoryChildActivity;
 import cn.moon.fulicenter.ui.activity.GoodsDetailsActivity;
+import cn.moon.fulicenter.ui.activity.LoginActivity;
 import cn.moon.fulicenter.ui.activity.MainActivity;
+import cn.moon.fulicenter.ui.activity.RegisterActivity;
 
 /**
  * Created by Moon on 2017/3/16.
@@ -59,5 +60,13 @@ public class MFGT {
         .putExtra(I.NewAndBoutiqueGoods.CAT_ID,goodsId)
         .putExtra(I.CategoryGroup.NAME,groupName)
         .putExtra(I.CategoryChild.DATA,list));
+    }
+
+    public static void gotoLogin(Activity activity) {
+        startActivity(activity, LoginActivity.class);
+    }
+
+    public static void gotoRegister(Activity activity) {
+        startActivity(activity, RegisterActivity.class);
     }
 }

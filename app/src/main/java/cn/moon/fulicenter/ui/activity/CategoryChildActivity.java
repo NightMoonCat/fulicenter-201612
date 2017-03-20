@@ -31,7 +31,7 @@ public class CategoryChildActivity extends AppCompatActivity {
     @BindView(R.id.btnOrderByTime)
     Button mBtnOrderByTime;
     String groupName;
-    @BindView(R.id.btnTitle)
+    @BindView(R.id.tvTitle)
     CatFilterCategoryButton mCfcbFilter;
 
     protected void onCreate(Bundle savedInstanceState) {
