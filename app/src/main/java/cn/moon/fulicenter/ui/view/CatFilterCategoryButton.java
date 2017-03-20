@@ -3,26 +3,18 @@ package cn.moon.fulicenter.ui.view;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import cn.moon.fulicenter.R;
 import cn.moon.fulicenter.model.bean.CategoryChildBean;
 import cn.moon.fulicenter.model.utils.CommonUtils;
-import cn.moon.fulicenter.model.utils.ImageLoader;
+import cn.moon.fulicenter.ui.adpter.CatFilterAdapter;
 
 
 public class CatFilterCategoryButton extends android.support.v7.widget.AppCompatButton {
@@ -50,7 +42,7 @@ public class CatFilterCategoryButton extends android.support.v7.widget.AppCompat
         this.setText(groupName);
         mList = list;
         mGridView = new GridView(mContext);
-        mAdapter = new CatFilterAdapter(mContext,mList);
+        mAdapter = new CatFilterAdapter(mContext,mList,groupName);
         mGridView.setAdapter(mAdapter);
 
     }
@@ -90,63 +82,5 @@ public class CatFilterCategoryButton extends android.support.v7.widget.AppCompat
         isExpand = !isExpand;
     }
 
-
-
-
-    class CatFilterAdapter extends BaseAdapter {
-        Context mContext;
-        List<CategoryChildBean> mList;
-
-        public CatFilterAdapter(Context context, List<CategoryChildBean> list) {
-            mContext = context;
-            mList = list;
-        }
-
-        @Override
-        public int getCount() {
-            return mList != null ? mList.size() : 0;
-        }
-
-        @Override
-        public CategoryChildBean getItem(int i) {
-            return mList.get(i);
-        }
-
-        @Override
-        public long getItemId(int i) {
-            return 0;
-        }
-
-        @Override
-        public View getView(int position, View view, ViewGroup viewGroup) {
-            CatFilterViewHolder holder;
-            if (view == null) {
-                view = View.inflate(mContext, R.layout.item_cat_fliter, null);
-                holder = new CatFilterViewHolder(view);
-                view.setTag(holder);
-            } else {
-                holder = (CatFilterViewHolder) view.getTag();
-            }
-            holder.bind(position);
-            return view;
-        }
-
-        class CatFilterViewHolder {
-            @BindView(R.id.ivCatFilterChildIcon)
-            ImageView mIvCatFilterChildIcon;
-            @BindView(R.id.tvCatFilterChildName)
-            TextView mTvCatFilterChildName;
-
-            CatFilterViewHolder(View view) {
-                ButterKnife.bind(this, view);
-            }
-
-            public void bind(int position) {
-                CategoryChildBean bean = mList.get(position);
-                mTvCatFilterChildName.setText(bean.getName());
-                ImageLoader.downloadImg(mContext,mIvCatFilterChildIcon,bean.getImageUrl());
-            }
-        }
-    }
 
 }
