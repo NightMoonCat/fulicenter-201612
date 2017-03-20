@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.Button;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,7 +32,7 @@ public class CategoryChildActivity extends AppCompatActivity {
     Button mBtnOrderByTime;
     String groupName;
     @BindView(R.id.btnTitle)
-    CatFilterCategoryButton mBtnTitle;
+    CatFilterCategoryButton mCfcbFilter;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +50,7 @@ public class CategoryChildActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        mBtnTitle.initView(groupName,mList);
+        mCfcbFilter.initView(groupName,mList);
     }
 
     @OnClick(R.id.ivBack)
@@ -84,4 +83,11 @@ public class CategoryChildActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mCfcbFilter != null) {
+            mCfcbFilter.release();
+        }
+    }
 }

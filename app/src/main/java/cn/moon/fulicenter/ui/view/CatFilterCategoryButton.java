@@ -42,6 +42,9 @@ public class CatFilterCategoryButton extends android.support.v7.widget.AppCompat
         this.setText(groupName);
         mList = list;
         mGridView = new GridView(mContext);
+        mGridView.setHorizontalSpacing(10);
+        mGridView.setVerticalSpacing(10);
+        mGridView.setNumColumns(GridView.AUTO_FIT);
         mAdapter = new CatFilterAdapter(mContext,mList,groupName);
         mGridView.setAdapter(mAdapter);
 
@@ -80,6 +83,12 @@ public class CatFilterCategoryButton extends android.support.v7.widget.AppCompat
                 R.drawable.arrow2_up : R.drawable.arrow2_down);
         setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, end, null);
         isExpand = !isExpand;
+    }
+
+    public void release() {
+        if (mPopupWindow != null) {
+            mPopupWindow.dismiss();
+        }
     }
 
 
