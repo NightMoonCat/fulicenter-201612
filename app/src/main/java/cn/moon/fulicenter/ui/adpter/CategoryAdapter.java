@@ -25,7 +25,7 @@ import cn.moon.fulicenter.ui.view.MFGT;
 public class CategoryAdapter extends BaseExpandableListAdapter {
     Context mContext;
     List<CategoryGroupBean> mCategoryGroupList;
-    List<List<CategoryChildBean>> mCategoryChildList;
+    ArrayList<ArrayList<CategoryChildBean>> mCategoryChildList;
 
     public CategoryAdapter(Context context) {
         mCategoryGroupList = new ArrayList<>();
@@ -92,7 +92,7 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public View getChildView(final int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+    public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         ChildViewHolder holder;
         if (convertView == null) {
             convertView = View.inflate(mContext, R.layout.item_category_child, null);
@@ -114,7 +114,7 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
                 @Override
                 public void onClick(View view) {
                     MFGT.gotoCategoryChildActivity(mContext,bean.getId(),
-                            getGroup(groupPosition).getName());
+                            getGroup(groupPosition).getName(),mCategoryChildList.get(groupPosition));
                 }
             });
         }
@@ -126,7 +126,7 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
         return false;
     }
 
-    public void initData(List<CategoryGroupBean> groupList, List<List<CategoryChildBean>> childList) {
+    public void initData(List<CategoryGroupBean> groupList, ArrayList<ArrayList<CategoryChildBean>> childList) {
         mCategoryGroupList.addAll(groupList);
         mCategoryChildList.addAll(childList);
         notifyDataSetChanged();

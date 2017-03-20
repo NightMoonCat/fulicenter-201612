@@ -38,7 +38,7 @@ public class CategoryFragment extends Fragment {
 
     ICategoryModel mModel;
     List<CategoryGroupBean> mGroupList = new ArrayList<>();
-    List<List<CategoryChildBean>> mChildList = new ArrayList<>();
+    ArrayList<ArrayList<CategoryChildBean>> mChildList = new ArrayList<>();
     @BindView(R.id.layout_tips)
     LinearLayout mLayoutTips;
 
