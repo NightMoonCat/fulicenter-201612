@@ -17,10 +17,12 @@ import cn.moon.fulicenter.application.FuLiCenterApplication;
 import cn.moon.fulicenter.application.I;
 import cn.moon.fulicenter.model.bean.Result;
 import cn.moon.fulicenter.model.bean.User;
+import cn.moon.fulicenter.model.dao.UserDao;
 import cn.moon.fulicenter.model.net.IUserModel;
 import cn.moon.fulicenter.model.net.OnCompleteListener;
 import cn.moon.fulicenter.model.net.UserModel;
 import cn.moon.fulicenter.model.utils.CommonUtils;
+import cn.moon.fulicenter.model.utils.L;
 import cn.moon.fulicenter.model.utils.MD5;
 import cn.moon.fulicenter.model.utils.ResultUtils;
 import cn.moon.fulicenter.model.utils.SharedPreferencesUtils;
@@ -28,6 +30,7 @@ import cn.moon.fulicenter.ui.view.MFGT;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private static final String TAG = "LoginActivity";
     @BindView(R.id.tvTitle)
     TextView mTvTitle;
     @BindView(R.id.etUserName)
@@ -104,11 +107,22 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void loginSuccess(User user) {
+    private void loginSuccess(final User user) {
         CommonUtils.showShortToast(R.string.login_success);
-
+        //保存在内存中
         FuLiCenterApplication.setCurrentUser(user);
+        L.e(TAG,"loginSuccess_user"+user);
+        //保存在ShaSharedPreferences中
         SharedPreferencesUtils.getInstance().setUserName(user.getMuserName());
+        //保存到数据库中
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                boolean b = UserDao.getInstance(LoginActivity.this).saveUserInfo(user);
+                L.e(TAG,"loginSuccess:"+b);
+            }
+        }).start();
+
         MFGT.finish(LoginActivity.this);
     }
 
