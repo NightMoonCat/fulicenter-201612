@@ -23,6 +23,7 @@ import cn.moon.fulicenter.model.net.UserModel;
 import cn.moon.fulicenter.model.utils.CommonUtils;
 import cn.moon.fulicenter.model.utils.MD5;
 import cn.moon.fulicenter.model.utils.ResultUtils;
+import cn.moon.fulicenter.model.utils.SharedPreferencesUtils;
 import cn.moon.fulicenter.ui.view.MFGT;
 
 public class LoginActivity extends AppCompatActivity {
@@ -34,9 +35,10 @@ public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.etPassword)
     EditText mEtPassword;
 
-    String userName,password;
+    String userName, password;
     IUserModel mModel;
     ProgressDialog mProgressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,41 +71,44 @@ public class LoginActivity extends AppCompatActivity {
     private void login() {
         if (checkInput()) {
             showDialog();
-            mModel.login(LoginActivity.this, userName, MD5.getMessageDigest(password) ,
+            mModel.login(LoginActivity.this, userName, MD5.getMessageDigest(password),
                     new OnCompleteListener<String>() {
-                @Override
-                public void onSuccess(String s) {
-                    Result result = ResultUtils.getResultFromJson(s, User.class);
-                    if (result != null) {
-                        if (result.isRetMsg()) {
-                            User user = (User) result.getRetData();
-                            loginSuccess(user);
-                        }
-                    } else {
-                        if (result.getRetCode() == I.MSG_LOGIN_UNKNOW_USER) {
-                            CommonUtils.showShortToast(R.string.login_fail_unknow_user);
-                        }
-                        if (result.getRetCode() == I.MSG_LOGIN_ERROR_PASSWORD) {
-                            CommonUtils.showShortToast(R.string.login_fail_error_password);
+                        @Override
+                        public void onSuccess(String s) {
+                            Result result = ResultUtils.getResultFromJson(s, User.class);
+                            if (result != null) {
+                                if (result.isRetMsg()) {
+                                    User user = (User) result.getRetData();
+                                    loginSuccess(user);
+                                }
+                            } else {
+                                if (result.getRetCode() == I.MSG_LOGIN_UNKNOW_USER) {
+                                    CommonUtils.showShortToast(R.string.login_fail_unknow_user);
+                                }
+                                if (result.getRetCode() == I.MSG_LOGIN_ERROR_PASSWORD) {
+                                    CommonUtils.showShortToast(R.string.login_fail_error_password);
+                                }
+
+                            }
+                            mProgressDialog.dismiss();
+
                         }
 
-                    }
-                    mProgressDialog.dismiss();
-
-                }
-
-                @Override
-                public void onError(String error) {
-                    CommonUtils.showShortToast(R.string.login_fail);
-                    mProgressDialog.dismiss();
-                }
-            });
+                        @Override
+                        public void onError(String error) {
+                            CommonUtils.showShortToast(getString(R.string.login_fail));
+                            mProgressDialog.dismiss();
+                        }
+                    });
 
         }
     }
 
     private void loginSuccess(User user) {
+        CommonUtils.showShortToast(R.string.login_success);
+
         FuLiCenterApplication.setCurrentUser(user);
+        SharedPreferencesUtils.getInstance().setUserName(user.getMuserName());
         MFGT.finish(LoginActivity.this);
     }
 
