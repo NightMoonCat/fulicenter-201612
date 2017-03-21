@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import cn.moon.fulicenter.R;
 import cn.moon.fulicenter.application.FuLiCenterApplication;
 import cn.moon.fulicenter.model.bean.User;
@@ -31,6 +32,7 @@ public class PersonalCenterFragment extends Fragment {
     @BindView(R.id.tv_collect_count)
     TextView mTvCollectCount;
     User user;
+
     public PersonalCenterFragment() {
         // Required empty public constructor
     }
@@ -56,6 +58,16 @@ public class PersonalCenterFragment extends Fragment {
 
     private void showInfo() {
         mTvUserName.setText(user.getMuserName());
-        ImageLoader.downloadImg(getActivity(),mIvUserAvatar,user.getAvatar() );
+        ImageLoader.downloadImg(getActivity(), mIvUserAvatar, user.getAvatar());
+    }
+
+    @OnClick({R.id.tv_center_settings, R.id.center_user_info})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.tv_center_settings:
+            case R.id.center_user_info:
+                MFGT.gotoSettingActivity(getActivity());
+                break;
+        }
     }
 }

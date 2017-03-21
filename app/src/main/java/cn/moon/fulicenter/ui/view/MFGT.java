@@ -16,6 +16,7 @@ import cn.moon.fulicenter.ui.activity.GoodsDetailsActivity;
 import cn.moon.fulicenter.ui.activity.LoginActivity;
 import cn.moon.fulicenter.ui.activity.MainActivity;
 import cn.moon.fulicenter.ui.activity.RegisterActivity;
+import cn.moon.fulicenter.ui.activity.SettingActivity;
 
 /**
  * Created by Moon on 2017/3/16.
@@ -74,5 +75,9 @@ public class MFGT {
     public static void startActivityForResult(Activity activity, Intent intent, int requestCode) {
         activity.startActivityForResult(intent, requestCode);
         activity.overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);
+    }
+
+    public static void gotoSettingActivity(Activity activity) {
+        startActivity(activity,SettingActivity.class);
     }
 }
