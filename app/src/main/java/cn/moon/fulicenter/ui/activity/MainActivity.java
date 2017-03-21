@@ -2,6 +2,7 @@ package cn.moon.fulicenter.ui.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     PersonalCenterFragment mPersonalCenterFragment;
 
     RadioButton[] mRadioButtons;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,15 +58,11 @@ public class MainActivity extends AppCompatActivity {
         initFragment();
         initRadioButton();
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.layout_content,mNewGoodsFragment)
-                .add(R.id.layout_content,mBoutiqueFragment)
-                .add(R.id.layout_content,mCategoryFragment)
-                .add(R.id.layout_content,mCartFragment)
-                .add(R.id.layout_content,mPersonalCenterFragment)
+                .add(R.id.layout_content, mNewGoodsFragment)
+                .add(R.id.layout_content, mBoutiqueFragment)
+                .add(R.id.layout_content, mCategoryFragment)
                 .hide(mBoutiqueFragment)
                 .hide(mCategoryFragment)
-                .hide(mPersonalCenterFragment)
-                .hide(mCartFragment)
                 .show(mNewGoodsFragment)
                 .commit();
 
@@ -72,11 +70,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void initRadioButton() {
         mRadioButtons = new RadioButton[5];
-        mRadioButtons[0] =  mBtnNewGoods;
-        mRadioButtons[1] =  mBtnBoutique;
-        mRadioButtons[2] =  mBtnCategory;
-        mRadioButtons[3] =  mBtnCart;
-        mRadioButtons[4] =  mBtnMe;
+        mRadioButtons[0] = mBtnNewGoods;
+        mRadioButtons[1] = mBtnBoutique;
+        mRadioButtons[2] = mBtnCategory;
+        mRadioButtons[3] = mBtnCart;
+        mRadioButtons[4] = mBtnMe;
     }
 
     private void initFragment() {
@@ -102,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setRadioButton() {
-        for (int i = 0;i<mRadioButtons.length;i++) {
+        for (int i = 0; i < mRadioButtons.length; i++) {
             if (i == currentIndex) {
                 mRadioButtons[i].setChecked(true);
             } else {
@@ -142,10 +140,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void setFragment() {
         if (currentIndex != index) {
-            getSupportFragmentManager().beginTransaction()
-                    .hide(mFragments[currentIndex])
-                    .show(mFragments[index])
-                    .commit();
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.hide(mFragments[currentIndex]);
+            if (!mFragments[index].isAdded()) {
+                ft.add(R.id.layout_content,mFragments[index]);
+            }
+            ft.show(mFragments[index]).commit();
+
             currentIndex = index;
         }
     }
