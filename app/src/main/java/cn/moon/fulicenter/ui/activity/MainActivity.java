@@ -14,6 +14,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import cn.moon.fulicenter.R;
 import cn.moon.fulicenter.application.FuLiCenterApplication;
+import cn.moon.fulicenter.model.utils.L;
 import cn.moon.fulicenter.ui.fragment.BoutiqueFragment;
 import cn.moon.fulicenter.ui.fragment.CartFragment;
 import cn.moon.fulicenter.ui.fragment.CategoryFragment;
@@ -22,7 +23,7 @@ import cn.moon.fulicenter.ui.fragment.PersonalCenterFragment;
 import cn.moon.fulicenter.ui.view.MFGT;
 
 public class MainActivity extends AppCompatActivity {
-
+    private static final String TAG = "MainActivity";
 
     @BindView(R.id.btnNewGoods)
     RadioButton mBtnNewGoods;
@@ -96,6 +97,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        L.e(TAG,"index="+index+",currentIndex="+currentIndex);
+        //点击个人中心或者之前在个人中心页面
+        if (currentIndex == 4) {
+            if (FuLiCenterApplication.getCurrentUser() == null) {
+                index = 0;
+            }
+            setFragment();
+        }
         setRadioButton();
     }
 
@@ -145,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
             if (!mFragments[index].isAdded()) {
                 ft.add(R.id.layout_content,mFragments[index]);
             }
-            ft.show(mFragments[index]).commit();
+            ft.show(mFragments[index]).commitAllowingStateLoss();
 
             currentIndex = index;
         }

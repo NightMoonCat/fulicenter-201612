@@ -2,7 +2,9 @@ package cn.moon.fulicenter.model.dao;
 
 import android.content.Context;
 
+import cn.moon.fulicenter.application.FuLiCenterApplication;
 import cn.moon.fulicenter.model.bean.User;
+import cn.moon.fulicenter.model.utils.SharedPreferencesUtils;
 
 /**
  * Created by Moon on 2017/3/21.
@@ -44,4 +46,9 @@ public class UserDao {
         }
     }
 
+    public void logout() {
+        FuLiCenterApplication.setCurrentUser(null);
+        SharedPreferencesUtils.getInstance().removeUser();
+        DBManager.getInstance().closeDB();
+    }
 }

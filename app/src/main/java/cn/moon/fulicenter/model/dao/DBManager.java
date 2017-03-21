@@ -59,4 +59,8 @@ public class DBManager {
         }
         return null;
     }
+
+    public void closeDB() {
+        mHelper.closeDB();
+    }
 }
