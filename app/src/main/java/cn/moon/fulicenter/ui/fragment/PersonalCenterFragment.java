@@ -67,7 +67,7 @@ public class PersonalCenterFragment extends Fragment {
 
     private void showInfo() {
         mTvUserName.setText(user.getMuserNick());
-        ImageLoader.downloadImg(getActivity(), mIvUserAvatar, user.getAvatar());
+        ImageLoader.setAvatar(ImageLoader.getAvatarUrl(user),getActivity(),mIvUserAvatar);
     }
 
     @OnClick({R.id.tv_center_settings, R.id.center_user_info})

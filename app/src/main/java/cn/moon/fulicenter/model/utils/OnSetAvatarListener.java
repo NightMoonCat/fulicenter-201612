@@ -24,6 +24,9 @@ import java.io.FileOutputStream;
 
 import cn.moon.fulicenter.R;
 
+import static android.R.attr.data;
+import static android.content.ContentValues.TAG;
+
 
 /**
  *
@@ -199,6 +202,7 @@ public class OnSetAvatarListener implements View.OnClickListener {
         }
         ivAvatar.setImageBitmap(avatar);
         File file = FileUtils.getAvatarPath(mActivity,mAvatarType, mUserName + ".jpg");
+        Log.e("main", file.getAbsolutePath());
         if(!file.getParentFile().exists()){
             Toast.makeText(mActivity, "照片保存失败,保存的路径不存在", Toast.LENGTH_LONG).show();
             return ;
@@ -255,6 +259,7 @@ public class OnSetAvatarListener implements View.OnClickListener {
         intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
         intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
         mActivity.startActivityForResult(intent,requestCode);
+        L.e(TAG, "requestCode=" + requestCode + ",data=" + data);
     }
 
     /**
