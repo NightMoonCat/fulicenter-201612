@@ -61,7 +61,7 @@ public class SettingActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.btn_logout)
-    public void onClick() {
+    public void logout() {
         UserDao.getInstance(SettingActivity.this).logout();
         MFGT.gotoLogin(SettingActivity.this, I.REQUEST_CODE_LOGIN);
         MFGT.finish(SettingActivity.this);
