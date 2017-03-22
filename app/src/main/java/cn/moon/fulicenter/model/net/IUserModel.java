@@ -12,4 +12,7 @@ public interface IUserModel {
 
     void register(Context context, String userName, String nickName, String password,
                   OnCompleteListener<String> listener);
+
+    void updateNick(Context context, String userName, String newNick,
+                    OnCompleteListener<String> listener);
 }

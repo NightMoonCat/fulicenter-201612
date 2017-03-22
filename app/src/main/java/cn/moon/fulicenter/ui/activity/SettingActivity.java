@@ -52,7 +52,7 @@ public class SettingActivity extends AppCompatActivity {
     private void showUserInfo(User user) {
         mTvUserProfileName.setText(user.getMuserName());
         mTvUserProfileNick.setText(user.getMuserNick());
-        ImageLoader.downloadImg(SettingActivity.this,mIvUserProfileAvatar,user.getAvatar());
+        ImageLoader.downloadImg(SettingActivity.this, mIvUserProfileAvatar, user.getAvatar());
     }
 
     @OnClick(R.id.ivBack)
@@ -65,5 +65,16 @@ public class SettingActivity extends AppCompatActivity {
         UserDao.getInstance(SettingActivity.this).logout();
         MFGT.gotoLogin(SettingActivity.this, I.REQUEST_CODE_LOGIN);
         MFGT.finish(SettingActivity.this);
+    }
+
+    @OnClick(R.id.layout_user_profile_nickname)
+    public void updateNick() {
+        MFGT.gotoUpdateNick(SettingActivity.this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initData();
     }
 }

@@ -17,6 +17,7 @@ import cn.moon.fulicenter.ui.activity.LoginActivity;
 import cn.moon.fulicenter.ui.activity.MainActivity;
 import cn.moon.fulicenter.ui.activity.RegisterActivity;
 import cn.moon.fulicenter.ui.activity.SettingActivity;
+import cn.moon.fulicenter.ui.activity.UpdateNickActivity;
 
 /**
  * Created by Moon on 2017/3/16.
@@ -79,5 +80,9 @@ public class MFGT {
 
     public static void gotoSettingActivity(Activity activity) {
         startActivity(activity,SettingActivity.class);
+    }
+
+    public static void gotoUpdateNick(Activity activity) {
+        startActivity(activity, UpdateNickActivity.class);
     }
 }
