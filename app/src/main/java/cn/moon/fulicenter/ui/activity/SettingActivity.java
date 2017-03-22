@@ -11,6 +11,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.moon.fulicenter.R;
 import cn.moon.fulicenter.application.FuLiCenterApplication;
+import cn.moon.fulicenter.application.I;
 import cn.moon.fulicenter.model.bean.User;
 import cn.moon.fulicenter.model.dao.UserDao;
 import cn.moon.fulicenter.model.utils.ImageLoader;
@@ -62,7 +63,7 @@ public class SettingActivity extends AppCompatActivity {
     @OnClick(R.id.btn_logout)
     public void onClick() {
         UserDao.getInstance(SettingActivity.this).logout();
-        MFGT.gotoLogin(SettingActivity.this);
+        MFGT.gotoLogin(SettingActivity.this, I.REQUEST_CODE_LOGIN);
         MFGT.finish(SettingActivity.this);
     }
 }

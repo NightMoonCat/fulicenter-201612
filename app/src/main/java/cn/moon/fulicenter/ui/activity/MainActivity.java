@@ -1,5 +1,6 @@
 package cn.moon.fulicenter.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -14,6 +15,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import cn.moon.fulicenter.R;
 import cn.moon.fulicenter.application.FuLiCenterApplication;
+import cn.moon.fulicenter.application.I;
 import cn.moon.fulicenter.model.utils.L;
 import cn.moon.fulicenter.ui.fragment.BoutiqueFragment;
 import cn.moon.fulicenter.ui.fragment.CartFragment;
@@ -133,14 +135,14 @@ public class MainActivity extends AppCompatActivity {
                 if (FuLiCenterApplication.getCurrentUser() != null) {
                     index = 3;
                 } else {
-                    MFGT.gotoLogin(MainActivity.this);
+                    MFGT.gotoLogin(MainActivity.this, I.REQUEST_CODE_LOGIN_FROM_CART);
                 }
                 break;
             case R.id.btnMe:
                 if (FuLiCenterApplication.getCurrentUser() != null) {
                     index = 4;
                 } else {
-                    MFGT.gotoLogin(MainActivity.this);
+                    MFGT.gotoLogin(MainActivity.this,I.REQUEST_CODE_LOGIN);
                 }
                 break;
         }
@@ -157,6 +159,21 @@ public class MainActivity extends AppCompatActivity {
             ft.show(mFragments[index]).commitAllowingStateLoss();
 
             currentIndex = index;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == I.REQUEST_CODE_LOGIN) {
+                index = 4;
+            }
+            if (requestCode == I.REQUEST_CODE_LOGIN_FROM_CART) {
+                index = 3;
+            }
+            setFragment();
+            setRadioButton();
         }
     }
 

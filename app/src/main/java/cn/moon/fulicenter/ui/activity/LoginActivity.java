@@ -123,6 +123,8 @@ public class LoginActivity extends AppCompatActivity {
             }
         }).start();
 
+        setResult(RESULT_OK);
+
         MFGT.finish(LoginActivity.this);
     }
 
