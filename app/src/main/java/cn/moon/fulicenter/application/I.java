@@ -359,7 +359,7 @@ public interface I {
     /** 客户端发送的上传/更新用户头像的请求 */
     String REQUEST_UPDATE_AVATAR = "updateAvatar";
     /** 客户端发送的更新用户昵称的请求 */
-    String REQUEST_UPDATE_USER_NICK = "nickOnClick";
+    String REQUEST_UPDATE_USER_NICK = "updateNick";
     /** 客户端发送的更新用户密码的请求 */
     String REQUEST_UPDATE_USER_PASSWORD = "updatePassword";
     /** 客户端发送的下载用户的好友列表的全部数据的请求 */

@@ -37,6 +37,7 @@ public class PersonalCenterFragment extends Fragment {
     TextView mTvCollectCount;
     User user;
     IUserModel mModel;
+
     public PersonalCenterFragment() {
         // Required empty public constructor
     }
@@ -92,7 +93,7 @@ public class PersonalCenterFragment extends Fragment {
 
     private void showInfo() {
         mTvUserName.setText(user.getMuserNick());
-        ImageLoader.setAvatar(ImageLoader.getAvatarUrl(user),getActivity(),mIvUserAvatar);
+        ImageLoader.setAvatar(ImageLoader.getAvatarUrl(user), getActivity(), mIvUserAvatar);
     }
 
     @OnClick({R.id.tv_center_settings, R.id.center_user_info})
@@ -103,5 +104,10 @@ public class PersonalCenterFragment extends Fragment {
                 MFGT.gotoSettingActivity(getActivity());
                 break;
         }
+    }
+
+    @OnClick(R.id.layout_center_collect)
+    public void CollectList() {
+        MFGT.gotoCollectList(getActivity());
     }
 }

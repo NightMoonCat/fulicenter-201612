@@ -112,7 +112,7 @@ public class UpdateNickActivity extends AppCompatActivity {
             }
         }).start();
 
-//        setResult(RESULT_OK);
+        setResult(RESULT_OK);
 
         MFGT.finish(UpdateNickActivity.this);
     }

@@ -4,6 +4,7 @@ import android.content.Context;
 
 import java.io.File;
 
+import cn.moon.fulicenter.model.bean.CollectBean;
 import cn.moon.fulicenter.model.bean.MessageBean;
 
 /**
@@ -23,5 +24,9 @@ public interface IUserModel {
     void updateAvatar(Context context, String userName, File file,
                       OnCompleteListener<String> listener);
 
-    void loadCollectCount(Context context, String userName, OnCompleteListener<MessageBean> listener);
+    void loadCollectCount(Context context, String userName,
+                          OnCompleteListener<MessageBean> listener);
+    void loadCollect(Context context, String userName,int pageId,int pageSize,
+                          OnCompleteListener<CollectBean[]> listener);
+
 }
