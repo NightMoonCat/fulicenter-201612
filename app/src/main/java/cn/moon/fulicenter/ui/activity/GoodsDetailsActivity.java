@@ -20,6 +20,7 @@ import cn.moon.fulicenter.model.net.GoodsDetailsModel;
 import cn.moon.fulicenter.model.net.IGoodsDetailsModel;
 import cn.moon.fulicenter.model.net.OnCompleteListener;
 import cn.moon.fulicenter.model.utils.CommonUtils;
+import cn.moon.fulicenter.model.utils.AntiShake;
 import cn.moon.fulicenter.ui.view.FlowIndicator;
 import cn.moon.fulicenter.ui.view.MFGT;
 import cn.moon.fulicenter.ui.view.SlideAutoLoopView;
@@ -140,9 +141,14 @@ public class GoodsDetailsActivity extends AppCompatActivity {
         MFGT.finish(GoodsDetailsActivity.this);
     }
 
+    AntiShake util = new AntiShake();
 
     @OnClick(R.id.iv_good_collect)
     public void collectGoods() {
+        //添加防抖检查，防止多次快速点击
+        if (util.check()) {
+            return;
+        }
 
         User user = FuLiCenterApplication.getCurrentUser();
         if (user == null) {
