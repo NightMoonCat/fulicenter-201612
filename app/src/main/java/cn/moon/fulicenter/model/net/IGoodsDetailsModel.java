@@ -3,6 +3,7 @@ package cn.moon.fulicenter.model.net;
 import android.content.Context;
 
 import cn.moon.fulicenter.model.bean.GoodsDetailsBean;
+import cn.moon.fulicenter.model.bean.MessageBean;
 
 /**
  * Created by Moon on 2017/3/16.
@@ -11,4 +12,5 @@ import cn.moon.fulicenter.model.bean.GoodsDetailsBean;
 public interface IGoodsDetailsModel {
     void loadData(Context context,int goodId, OnCompleteListener<GoodsDetailsBean> listener);
 
+    void loadCollectStatus(Context context, int goodsId, String userName, OnCompleteListener<MessageBean> listener);
 }

@@ -3,18 +3,23 @@ package cn.moon.fulicenter.ui.activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.webkit.WebView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.moon.fulicenter.R;
+import cn.moon.fulicenter.application.FuLiCenterApplication;
 import cn.moon.fulicenter.application.I;
 import cn.moon.fulicenter.model.bean.AlbumsBean;
 import cn.moon.fulicenter.model.bean.GoodsDetailsBean;
+import cn.moon.fulicenter.model.bean.MessageBean;
+import cn.moon.fulicenter.model.bean.User;
 import cn.moon.fulicenter.model.net.GoodsDetailsModel;
 import cn.moon.fulicenter.model.net.IGoodsDetailsModel;
 import cn.moon.fulicenter.model.net.OnCompleteListener;
+import cn.moon.fulicenter.model.utils.CommonUtils;
 import cn.moon.fulicenter.ui.view.FlowIndicator;
 import cn.moon.fulicenter.ui.view.MFGT;
 import cn.moon.fulicenter.ui.view.SlideAutoLoopView;
@@ -23,6 +28,7 @@ public class GoodsDetailsActivity extends AppCompatActivity {
 
     int goodId;
     IGoodsDetailsModel mModel;
+
     @BindView(R.id.tv_good_name_english)
     TextView mTvGoodNameEnglish;
     @BindView(R.id.tv_good_name)
@@ -37,9 +43,11 @@ public class GoodsDetailsActivity extends AppCompatActivity {
     FlowIndicator mIndicator;
     @BindView(R.id.wv_good_brief)
     WebView mWvGoodBrief;
+    @BindView(R.id.iv_good_collect)
+    ImageView mIvGoodCollect;
 
     GoodsDetailsBean mBean;
-
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,21 +64,55 @@ public class GoodsDetailsActivity extends AppCompatActivity {
         initData();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initData();
+    }
+
     private void initData() {
-        mModel.loadData(GoodsDetailsActivity.this, goodId, new OnCompleteListener<GoodsDetailsBean>() {
-            @Override
-            public void onSuccess(GoodsDetailsBean bean) {
-                if (bean != null) {
-                    mBean = bean;
-                    showDetails(bean);
+        user = FuLiCenterApplication.getCurrentUser();
+        if (mBean == null) {
+            mModel.loadData(GoodsDetailsActivity.this, goodId, new OnCompleteListener<GoodsDetailsBean>() {
+                @Override
+                public void onSuccess(GoodsDetailsBean bean) {
+                    if (bean != null) {
+                        mBean = bean;
+                        showDetails(bean);
+                    }
                 }
-            }
 
-            @Override
-            public void onError(String error) {
+                @Override
+                public void onError(String error) {
+                    CommonUtils.showShortToast("加载商品失败");
+                }
+            });
+        }
+        loadCollectStatus();
+    }
 
-            }
-        });
+    private void loadCollectStatus() {
+        if (user != null) {
+            mModel.loadCollectStatus(GoodsDetailsActivity.this, goodId,
+                    user.getMuserName(), new OnCompleteListener<MessageBean>() {
+                        @Override
+                        public void onSuccess(MessageBean msg) {
+                            if (msg != null && msg.isSuccess()) {
+                                setCollectStatus(true);
+                            }
+                        }
+
+                        @Override
+                        public void onError(String error) {
+                            setCollectStatus(false);
+                        }
+                    });
+        }
+    }
+
+    private void setCollectStatus(boolean isCollect) {
+        mIvGoodCollect.setImageResource(isCollect? R.mipmap.bg_collect_out :
+        R.mipmap.bg_collect_in);
     }
 
     private void showDetails(GoodsDetailsBean bean) {
@@ -88,7 +130,7 @@ public class GoodsDetailsActivity extends AppCompatActivity {
             AlbumsBean[] albums = mBean.getProperties()[0].getAlbums();
             if (albums != null && albums.length > 0) {
                 String[] urls = new String[albums.length];
-                for (int i=0;i<albums.length;i++) {
+                for (int i = 0; i < albums.length; i++) {
                     urls[i] = albums[0].getImgUrl();
                     return urls;
                 }
