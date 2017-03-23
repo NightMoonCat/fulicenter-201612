@@ -15,7 +15,11 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.moon.fulicenter.R;
 import cn.moon.fulicenter.application.FuLiCenterApplication;
+import cn.moon.fulicenter.model.bean.MessageBean;
 import cn.moon.fulicenter.model.bean.User;
+import cn.moon.fulicenter.model.net.IUserModel;
+import cn.moon.fulicenter.model.net.OnCompleteListener;
+import cn.moon.fulicenter.model.net.UserModel;
 import cn.moon.fulicenter.model.utils.ImageLoader;
 import cn.moon.fulicenter.ui.view.MFGT;
 
@@ -32,7 +36,7 @@ public class PersonalCenterFragment extends Fragment {
     @BindView(R.id.tv_collect_count)
     TextView mTvCollectCount;
     User user;
-
+    IUserModel mModel;
     public PersonalCenterFragment() {
         // Required empty public constructor
     }
@@ -62,7 +66,28 @@ public class PersonalCenterFragment extends Fragment {
         user = FuLiCenterApplication.getCurrentUser();
         if (user != null) {
             showInfo();
+            loadCollectCount();
         }
+    }
+
+    private void loadCollectCount() {
+        mModel = new UserModel();
+        mModel.loadCollectCount(getActivity(), user.getMuserName(),
+                new OnCompleteListener<MessageBean>() {
+                    @Override
+                    public void onSuccess(MessageBean msg) {
+                        if (msg != null && msg.isSuccess()) {
+                            mTvCollectCount.setText(msg.getMsg());
+                        } else {
+                            mTvCollectCount.setText("0");
+                        }
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        mTvCollectCount.setText("0");
+                    }
+                });
     }
 
     private void showInfo() {

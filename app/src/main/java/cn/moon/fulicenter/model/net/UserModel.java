@@ -5,6 +5,7 @@ import android.content.Context;
 import java.io.File;
 
 import cn.moon.fulicenter.application.I;
+import cn.moon.fulicenter.model.bean.MessageBean;
 import cn.moon.fulicenter.model.utils.OkHttpUtils;
 
 /**
@@ -56,6 +57,16 @@ public class UserModel implements IUserModel {
                 .addFile2(file)
                 .targetClass(String.class)
                 .post()
+                .execute(listener);
+    }
+
+    @Override
+    public void loadCollectCount(Context context, String userName,
+                                 OnCompleteListener<MessageBean> listener) {
+        OkHttpUtils<MessageBean> utils = new OkHttpUtils<>(context);
+        utils.setRequestUrl(I.REQUEST_FIND_COLLECT_COUNT)
+                .addParam(I.Collect.USER_NAME, userName)
+                .targetClass(MessageBean.class)
                 .execute(listener);
     }
 }

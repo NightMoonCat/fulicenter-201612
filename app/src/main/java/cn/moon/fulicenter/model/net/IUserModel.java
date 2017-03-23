@@ -4,6 +4,8 @@ import android.content.Context;
 
 import java.io.File;
 
+import cn.moon.fulicenter.model.bean.MessageBean;
+
 /**
  * Created by Moon on 2017/3/20.
  */
@@ -20,4 +22,6 @@ public interface IUserModel {
 
     void updateAvatar(Context context, String userName, File file,
                       OnCompleteListener<String> listener);
+
+    void loadCollectCount(Context context, String userName, OnCompleteListener<MessageBean> listener);
 }
