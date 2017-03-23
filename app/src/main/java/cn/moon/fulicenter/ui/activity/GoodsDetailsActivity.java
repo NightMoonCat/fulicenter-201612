@@ -49,6 +49,7 @@ public class GoodsDetailsActivity extends AppCompatActivity {
     GoodsDetailsBean mBean;
     User user;
 
+    boolean isCollect = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,7 +72,6 @@ public class GoodsDetailsActivity extends AppCompatActivity {
     }
 
     private void initData() {
-        user = FuLiCenterApplication.getCurrentUser();
         if (mBean == null) {
             mModel.loadData(GoodsDetailsActivity.this, goodId, new OnCompleteListener<GoodsDetailsBean>() {
                 @Override
@@ -92,25 +92,13 @@ public class GoodsDetailsActivity extends AppCompatActivity {
     }
 
     private void loadCollectStatus() {
+        User user = FuLiCenterApplication.getCurrentUser();
         if (user != null) {
-            mModel.loadCollectStatus(GoodsDetailsActivity.this, goodId,
-                    user.getMuserName(), new OnCompleteListener<MessageBean>() {
-                        @Override
-                        public void onSuccess(MessageBean msg) {
-                            if (msg != null && msg.isSuccess()) {
-                                setCollectStatus(true);
-                            }
-                        }
-
-                        @Override
-                        public void onError(String error) {
-                            setCollectStatus(false);
-                        }
-                    });
+            collectionAction(I.ACTION_IS_COLLECT,user);
         }
     }
 
-    private void setCollectStatus(boolean isCollect) {
+    private void setCollectStatus() {
         mIvGoodCollect.setImageResource(isCollect? R.mipmap.bg_collect_out :
         R.mipmap.bg_collect_in);
     }
@@ -146,9 +134,57 @@ public class GoodsDetailsActivity extends AppCompatActivity {
         return 0;
     }
 
+
     @OnClick(R.id.ivBack)
     public void clickBack() {
         MFGT.finish(GoodsDetailsActivity.this);
+    }
+
+
+    @OnClick(R.id.iv_good_collect)
+    public void collectGoods() {
+
+        User user = FuLiCenterApplication.getCurrentUser();
+        if (user == null) {
+            MFGT.gotoLogin(GoodsDetailsActivity.this, 0);
+        } else {
+            if (isCollect) {
+                //已收藏，点击取消收藏
+                collectionAction(I.ACTION_DELETE_COLLECT, user);
+            } else {
+                //添加收藏
+                collectionAction(I.ACTION_ADD_COLLECT,user);
+            }
+
+        }
+    }
+
+    private void collectionAction(final int action, User user) {
+        mModel.collectAction(GoodsDetailsActivity.this,action, goodId,
+                user.getMuserName(), new OnCompleteListener<MessageBean>() {
+                    @Override
+                    public void onSuccess(MessageBean msg) {
+                        if (msg != null && msg.isSuccess()) {
+                            isCollect = true;
+                            if (action == I.ACTION_DELETE_COLLECT) {
+                                isCollect = false;
+                            }
+                        } else {
+                            isCollect = false;
+                            if (action == I.ACTION_DELETE_COLLECT) {
+                                isCollect = true;
+                            }
+                        }
+                        setCollectStatus();
+
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        isCollect = false;
+                        setCollectStatus();
+                    }
+                });
     }
 }
 

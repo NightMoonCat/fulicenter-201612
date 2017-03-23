@@ -10,7 +10,9 @@ import cn.moon.fulicenter.model.bean.MessageBean;
  */
 
 public interface IGoodsDetailsModel {
-    void loadData(Context context,int goodId, OnCompleteListener<GoodsDetailsBean> listener);
+    void loadData(Context context, int goodId, OnCompleteListener<GoodsDetailsBean> listener);
 
-    void loadCollectStatus(Context context, int goodsId, String userName, OnCompleteListener<MessageBean> listener);
+    void collectAction(Context context,int action, int goodsId, String userName,
+                       OnCompleteListener<MessageBean> listener);
+
 }
