@@ -106,6 +106,9 @@ public class CollectsActivity extends AppCompatActivity {
                                 mAdapter.setMore(false);
                             }
                             mAdapter.notifyDataSetChanged();
+                        } else if (mPageId==1 && result!=null && result.length==0) {
+                            mList.clear();
+                            mAdapter.notifyDataSetChanged();
                         }
                     }
 
