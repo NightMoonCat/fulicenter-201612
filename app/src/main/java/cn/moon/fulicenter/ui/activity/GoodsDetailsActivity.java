@@ -17,7 +17,9 @@ import cn.moon.fulicenter.model.bean.AlbumsBean;
 import cn.moon.fulicenter.model.bean.GoodsDetailsBean;
 import cn.moon.fulicenter.model.bean.MessageBean;
 import cn.moon.fulicenter.model.bean.User;
+import cn.moon.fulicenter.model.net.CartModel;
 import cn.moon.fulicenter.model.net.GoodsDetailsModel;
+import cn.moon.fulicenter.model.net.ICartModel;
 import cn.moon.fulicenter.model.net.IGoodsDetailsModel;
 import cn.moon.fulicenter.model.net.OnCompleteListener;
 import cn.moon.fulicenter.model.utils.AntiShake;
@@ -30,7 +32,7 @@ import cn.moon.fulicenter.ui.view.SlideAutoLoopView;
 public class GoodsDetailsActivity extends AppCompatActivity {
 
     int goodId;
-    IGoodsDetailsModel mModel;
+    IGoodsDetailsModel mGoodsModel;
 
     @BindView(R.id.tv_good_name_english)
     TextView mTvGoodNameEnglish;
@@ -50,10 +52,11 @@ public class GoodsDetailsActivity extends AppCompatActivity {
     ImageView mIvGoodCollect;
 
     GoodsDetailsBean mBean;
-    User user;
+    AntiShake util = new AntiShake();
+    ICartModel mCartModel;
 
     boolean isCollect = false;
-    private String  TAG = GoodsDetailsActivity.class.getSimpleName();
+    private String TAG = GoodsDetailsActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +69,8 @@ public class GoodsDetailsActivity extends AppCompatActivity {
             MFGT.finish(GoodsDetailsActivity.this);
             return;
         }
-        mModel = new GoodsDetailsModel();
+        mCartModel = new CartModel();
+        mGoodsModel = new GoodsDetailsModel();
         initData();
     }
 
@@ -78,7 +82,7 @@ public class GoodsDetailsActivity extends AppCompatActivity {
 
     private void initData() {
         if (mBean == null) {
-            mModel.loadData(GoodsDetailsActivity.this, goodId, new OnCompleteListener<GoodsDetailsBean>() {
+            mGoodsModel.loadData(GoodsDetailsActivity.this, goodId, new OnCompleteListener<GoodsDetailsBean>() {
                 @Override
                 public void onSuccess(GoodsDetailsBean bean) {
                     if (bean != null) {
@@ -99,13 +103,13 @@ public class GoodsDetailsActivity extends AppCompatActivity {
     private void loadCollectStatus() {
         User user = FuLiCenterApplication.getCurrentUser();
         if (user != null) {
-            collectionAction(I.ACTION_IS_COLLECT,user);
+            collectionAction(I.ACTION_IS_COLLECT, user);
         }
     }
 
     private void setCollectStatus() {
-        mIvGoodCollect.setImageResource(isCollect? R.mipmap.bg_collect_out :
-        R.mipmap.bg_collect_in);
+        mIvGoodCollect.setImageResource(isCollect ? R.mipmap.bg_collect_out :
+                R.mipmap.bg_collect_in);
     }
 
     private void showDetails(GoodsDetailsBean bean) {
@@ -148,14 +152,14 @@ public class GoodsDetailsActivity extends AppCompatActivity {
     @OnClick(R.id.ivBack)
     public void clickBack() {
 
-        L.e(TAG,"onDestroy,isCollect="+isCollect);
-        setResult(RESULT_OK,new Intent()
-                .putExtra(I.GoodsDetails.KEY_IS_COLLECTED,isCollect)
-                .putExtra(I.GoodsDetails.KEY_GOODS_ID,goodId));
+        L.e(TAG, "onDestroy,isCollect=" + isCollect);
+        setResult(RESULT_OK, new Intent()
+                .putExtra(I.GoodsDetails.KEY_IS_COLLECTED, isCollect)
+                .putExtra(I.GoodsDetails.KEY_GOODS_ID, goodId));
         MFGT.finish(GoodsDetailsActivity.this);
     }
 
-    AntiShake util = new AntiShake();
+
 
     @OnClick(R.id.iv_good_collect)
     public void collectGoods() {
@@ -173,14 +177,46 @@ public class GoodsDetailsActivity extends AppCompatActivity {
                 collectionAction(I.ACTION_DELETE_COLLECT, user);
             } else {
                 //添加收藏
-                collectionAction(I.ACTION_ADD_COLLECT,user);
+                collectionAction(I.ACTION_ADD_COLLECT, user);
             }
 
         }
     }
 
+    @OnClick(R.id.iv_good_cart)
+    public void addCart() {
+        if (util.check()) {
+            return;
+        }
+        User user = FuLiCenterApplication.getCurrentUser();
+        if (user == null) {
+            MFGT.gotoLogin(GoodsDetailsActivity.this, 0);
+        } else {
+            addGoodsToCart(user);
+        }
+    }
+
+    private void addGoodsToCart(User user) {
+        mCartModel.cartAction(GoodsDetailsActivity.this, I.ACTION_CART_ADD, null,
+                String.valueOf(goodId), user.getMuserName(), 1, new OnCompleteListener<MessageBean>() {
+                    @Override
+                    public void onSuccess(MessageBean result) {
+                        if (result != null && result.isSuccess()) {
+                            CommonUtils.showShortToast(R.string.add_goods_success);
+                        } else {
+                            CommonUtils.showShortToast(R.string.add_goods_fail);
+                        }
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        CommonUtils.showShortToast(R.string.add_goods_fail);
+                    }
+                });
+    }
+
     private void collectionAction(final int action, User user) {
-        mModel.collectAction(GoodsDetailsActivity.this,action, goodId,
+        mGoodsModel.collectAction(GoodsDetailsActivity.this, action, goodId,
                 user.getMuserName(), new OnCompleteListener<MessageBean>() {
                     @Override
                     public void onSuccess(MessageBean msg) {
@@ -189,7 +225,7 @@ public class GoodsDetailsActivity extends AppCompatActivity {
 //                            if (action == I.ACTION_DELETE_COLLECT) {
 //                                isCollect = false;
 //                            }
-                            isCollect = action==I.ACTION_DELETE_COLLECT?false:true;
+                            isCollect = action == I.ACTION_DELETE_COLLECT ? false : true;
                             if (action != I.ACTION_IS_COLLECT) {
                                 CommonUtils.showShortToast(msg.getMsg());
                             }
@@ -198,7 +234,7 @@ public class GoodsDetailsActivity extends AppCompatActivity {
 //                            if (action == I.ACTION_DELETE_COLLECT) {
 //                                isCollect = true;
 //                            }
-                            isCollect = action==I.ACTION_IS_COLLECT?false:isCollect;
+                            isCollect = action == I.ACTION_IS_COLLECT ? false : isCollect;
                         }
                         setCollectStatus();
 
