@@ -14,6 +14,10 @@ import butterknife.ButterKnife;
 import cn.moon.fulicenter.R;
 import cn.moon.fulicenter.application.I;
 import cn.moon.fulicenter.model.bean.CollectBean;
+import cn.moon.fulicenter.model.bean.MessageBean;
+import cn.moon.fulicenter.model.net.GoodsDetailsModel;
+import cn.moon.fulicenter.model.net.IGoodsDetailsModel;
+import cn.moon.fulicenter.model.net.OnCompleteListener;
 import cn.moon.fulicenter.model.utils.ImageLoader;
 import cn.moon.fulicenter.ui.view.MFGT;
 
@@ -22,7 +26,7 @@ import cn.moon.fulicenter.ui.view.MFGT;
  */
 
 public class CollectsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-
+    IGoodsDetailsModel mModel;
     boolean more;
 
     Context mContext;
@@ -101,13 +105,14 @@ public class CollectsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         TextView tvGoodsName;
         @BindView(R.id.ivCollectDelete)
         ImageView ivCollectDelete;
-
         GoodsViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
         }
 
-        public void bind(int position) {
+        public void bind(final int position) {
+            mModel = new GoodsDetailsModel();
+
             final CollectBean bean = mList.get(position);
             tvGoodsName.setText(bean.getGoodsName());
             ImageLoader.downloadImg(mContext, ivGoodsThumb, bean.getGoodsThumb());
@@ -117,8 +122,32 @@ public class CollectsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     MFGT.gotoGoodsDetails(mContext, bean.getGoodsId());
                 }
             });
+
+            ivCollectDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mModel.collectAction(mContext, I.ACTION_DELETE_COLLECT,
+                            bean.getGoodsId(), bean.getUserName(), new OnCompleteListener<MessageBean>() {
+                                @Override
+                                public void onSuccess(MessageBean result) {
+                                    if (result != null && result.isSuccess()) {
+                                        tvGoodsName.setText(null);
+                                        ivGoodsThumb.setImageBitmap(null);
+                                        mList.remove(position);
+                                        notifyDataSetChanged();
+                                    }
+                                }
+
+                                @Override
+                                public void onError(String error) {
+
+                                }
+                            });
+                }
+            });
         }
     }
+
 
     static class FooterViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.tvFooter)
