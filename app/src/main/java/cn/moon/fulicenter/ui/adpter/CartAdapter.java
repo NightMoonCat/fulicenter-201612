@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,6 +25,7 @@ import cn.moon.fulicenter.model.utils.ImageLoader;
 public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     Context mContext;
     List<CartBean> mList;
+    CompoundButton.OnCheckedChangeListener mListener;
 
     public CartAdapter(Context mContext, List<CartBean> mList) {
         this.mContext = mContext;
@@ -47,6 +49,10 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public int getItemCount() {
         return mList != null ? mList.size() : 0;
+    }
+
+    public void setListener(CompoundButton.OnCheckedChangeListener listener) {
+        mListener = listener;
     }
 
 
@@ -74,6 +80,7 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public void bind(int position) {
             CartBean bean = mList.get(position);
             mTvCartCount.setText("("+bean.getCount()+")");
+            mCbCartSelected.setChecked(bean.isChecked());//是否被选中
 
             GoodsDetailsBean goods = bean.getGoods();
             if (goods != null) {
@@ -81,6 +88,9 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 ImageLoader.downloadImg(mContext,mIvCartThumb,goods.getGoodsThumb());
                 mTvCartPrice.setText(goods.getCurrencyPrice());
             }
+            mCbCartSelected.setTag(position);
+            //将OnCheckedChangeListener的listener对象从CartFragment传到适配器CartAdapter,再传到viewHolder
+            mCbCartSelected.setOnCheckedChangeListener(mListener);
         }
     }
 }
