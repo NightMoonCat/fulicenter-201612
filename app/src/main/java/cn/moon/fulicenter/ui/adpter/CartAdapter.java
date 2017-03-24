@@ -76,9 +76,11 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mTvCartCount.setText("("+bean.getCount()+")");
 
             GoodsDetailsBean goods = bean.getGoods();
-            mTvCartGoodName.setText(goods.getGoodsName());
-            ImageLoader.downloadImg(mContext,mIvCartThumb,goods.getGoodsThumb());
-            mTvCartPrice.setText(goods.getCurrencyPrice());
+            if (goods != null) {
+                mTvCartGoodName.setText(goods.getGoodsName());
+                ImageLoader.downloadImg(mContext,mIvCartThumb,goods.getGoodsThumb());
+                mTvCartPrice.setText(goods.getCurrencyPrice());
+            }
         }
     }
 }
