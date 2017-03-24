@@ -176,7 +176,6 @@ public class MainActivity extends AppCompatActivity {
             setRadioButton();
         }
     }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
