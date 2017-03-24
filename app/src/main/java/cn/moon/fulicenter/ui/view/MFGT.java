@@ -51,8 +51,8 @@ public class MFGT {
     }
 
     public static void gotoGoodsDetails(Context activity, int goodsId) {
-        activity.startActivity(new Intent(activity, GoodsDetailsActivity.class)
-                .putExtra(I.Goods.KEY_GOODS_ID,goodsId));
+        startActivityForResult((Activity) activity,new Intent(activity, GoodsDetailsActivity.class)
+                .putExtra(I.Goods.KEY_GOODS_ID,goodsId),I.REQUEST_CODE_COLLECTED);
 
     }
 

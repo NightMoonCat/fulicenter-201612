@@ -1,5 +1,6 @@
 package cn.moon.fulicenter.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -24,6 +25,7 @@ import cn.moon.fulicenter.model.net.OnCompleteListener;
 import cn.moon.fulicenter.model.net.UserModel;
 import cn.moon.fulicenter.model.utils.CommonUtils;
 import cn.moon.fulicenter.model.utils.ImageLoader;
+import cn.moon.fulicenter.model.utils.L;
 import cn.moon.fulicenter.model.utils.ResultUtils;
 import cn.moon.fulicenter.ui.adpter.CollectsAdapter;
 import cn.moon.fulicenter.ui.view.SpaceItemDecoration;
@@ -151,6 +153,21 @@ public class CollectsActivity extends AppCompatActivity {
         }
         if (mTvRefreshHint != null) {
             mTvRefreshHint.setVisibility(refresh ? View.VISIBLE : View.GONE);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK && requestCode == I.REQUEST_CODE_COLLECTED) {
+            boolean isCollected = data.getBooleanExtra(I.GoodsDetails.KEY_IS_COLLECTED, true);
+            int goodsId = data.getIntExtra(I.GoodsDetails.KEY_GOODS_ID, 0);
+            L.e(TAG,"onActivityResult,isCollected="+isCollected+"goodsId"+goodsId);
+            if (!isCollected) {
+                mList.remove(new CollectBean(goodsId));
+                mAdapter.notifyDataSetChanged();
+            }
         }
     }
 }

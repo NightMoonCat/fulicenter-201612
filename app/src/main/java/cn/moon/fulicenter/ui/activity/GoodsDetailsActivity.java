@@ -1,5 +1,6 @@
 package cn.moon.fulicenter.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.webkit.WebView;
@@ -19,8 +20,9 @@ import cn.moon.fulicenter.model.bean.User;
 import cn.moon.fulicenter.model.net.GoodsDetailsModel;
 import cn.moon.fulicenter.model.net.IGoodsDetailsModel;
 import cn.moon.fulicenter.model.net.OnCompleteListener;
-import cn.moon.fulicenter.model.utils.CommonUtils;
 import cn.moon.fulicenter.model.utils.AntiShake;
+import cn.moon.fulicenter.model.utils.CommonUtils;
+import cn.moon.fulicenter.model.utils.L;
 import cn.moon.fulicenter.ui.view.FlowIndicator;
 import cn.moon.fulicenter.ui.view.MFGT;
 import cn.moon.fulicenter.ui.view.SlideAutoLoopView;
@@ -51,6 +53,8 @@ public class GoodsDetailsActivity extends AppCompatActivity {
     User user;
 
     boolean isCollect = false;
+    private String  TAG = GoodsDetailsActivity.class.getSimpleName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -135,9 +139,19 @@ public class GoodsDetailsActivity extends AppCompatActivity {
         return 0;
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        clickBack();
+    }
 
     @OnClick(R.id.ivBack)
     public void clickBack() {
+
+        L.e(TAG,"onDestroy,isCollect="+isCollect);
+        setResult(RESULT_OK,new Intent()
+                .putExtra(I.GoodsDetails.KEY_IS_COLLECTED,isCollect)
+                .putExtra(I.GoodsDetails.KEY_GOODS_ID,goodId));
         MFGT.finish(GoodsDetailsActivity.this);
     }
 
@@ -197,5 +211,6 @@ public class GoodsDetailsActivity extends AppCompatActivity {
                     }
                 });
     }
+
 }
 
