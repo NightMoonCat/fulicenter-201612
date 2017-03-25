@@ -50,11 +50,13 @@ public class GoodsDetailsActivity extends AppCompatActivity {
     WebView mWvGoodBrief;
     @BindView(R.id.iv_good_collect)
     ImageView mIvGoodCollect;
+    @BindView(R.id.tvTitle)
+    TextView mTvTitle;
 
     GoodsDetailsBean mBean;
     AntiShake util = new AntiShake();
-    ICartModel mCartModel;
 
+    ICartModel mCartModel;
     boolean isCollect = false;
     private String TAG = GoodsDetailsActivity.class.getSimpleName();
 
@@ -71,7 +73,12 @@ public class GoodsDetailsActivity extends AppCompatActivity {
         }
         mCartModel = new CartModel();
         mGoodsModel = new GoodsDetailsModel();
+        initView();
         initData();
+    }
+
+    private void initView() {
+        mTvTitle.setText(R.string.goods_details_title);
     }
 
     @Override
@@ -160,7 +167,6 @@ public class GoodsDetailsActivity extends AppCompatActivity {
     }
 
 
-
     @OnClick(R.id.iv_good_collect)
     public void collectGoods() {
         //添加防抖检查，防止多次快速点击
@@ -247,6 +253,5 @@ public class GoodsDetailsActivity extends AppCompatActivity {
                     }
                 });
     }
-
 }
 
