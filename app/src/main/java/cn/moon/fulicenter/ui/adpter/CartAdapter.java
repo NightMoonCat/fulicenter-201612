@@ -25,6 +25,7 @@ import cn.moon.fulicenter.model.net.ICartModel;
 import cn.moon.fulicenter.model.net.OnCompleteListener;
 import cn.moon.fulicenter.model.utils.CommonUtils;
 import cn.moon.fulicenter.model.utils.ImageLoader;
+import cn.moon.fulicenter.ui.view.MFGT;
 
 /**
  * Created by Moon on 2017/3/15.
@@ -36,6 +37,7 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     CompoundButton.OnCheckedChangeListener mListener;
     User mUser;
     ICartModel mModel;
+
     public CartAdapter(Context mContext, List<CartBean> mList) {
         this.mContext = mContext;
         this.mList = mList;
@@ -86,23 +88,35 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             super(view);
             ButterKnife.bind(this, view);
         }
+
+        private int getPrice(String p) {
+            String pStr = p.substring(p.indexOf("￥") + 1);
+            return Integer.valueOf(pStr);
+        }
+
         public void bind(final int position) {
             mUser = FuLiCenterApplication.getCurrentUser();
 
             final CartBean bean = mList.get(position);
-            mTvCartCount.setText("("+bean.getCount()+")");
+            mTvCartCount.setText("(" + bean.getCount() + ")");
             mCbCartSelected.setChecked(bean.isChecked());//是否被选中
 
             final GoodsDetailsBean goods = bean.getGoods();
             if (goods != null) {
                 mTvCartGoodName.setText(goods.getGoodsName());
-                ImageLoader.downloadImg(mContext,mIvCartThumb,goods.getGoodsThumb());
-                mTvCartPrice.setText(goods.getCurrencyPrice());
+                ImageLoader.downloadImg(mContext, mIvCartThumb, goods.getGoodsThumb());
+                mTvCartPrice.setText("￥" + getPrice(goods.getCurrencyPrice()) * bean.getCount());
             }
             mCbCartSelected.setTag(position);
             //将OnCheckedChangeListener的listener对象从CartFragment传到适配器CartAdapter,再传到viewHolder
             mCbCartSelected.setOnCheckedChangeListener(mListener);
 
+            mIvCartThumb.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    MFGT.gotoGoodsDetails(mContext,bean.getGoodsId());
+                }
+            });
 
             mIvCartAdd.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -112,12 +126,12 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
                 private void updateAddCart() {
                     mModel.cartAction(mContext, I.ACTION_CART_UPDATE, String.valueOf(bean.getId()), null,
-                            null, bean.getCount()+1, new OnCompleteListener<MessageBean>() {
+                            null, bean.getCount() + 1, new OnCompleteListener<MessageBean>() {
                                 @Override
                                 public void onSuccess(MessageBean result) {
                                     if (result != null && result.isSuccess()) {
-                                        bean.setCount(bean.getCount()+1);
-                                        mTvCartCount.setText("("+bean.getCount()+")");
+                                        bean.setCount(bean.getCount() + 1);
+                                        mTvCartCount.setText("(" + bean.getCount() + ")");
                                         notifyDataSetChanged();
                                     }
                                 }
@@ -155,12 +169,12 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                                 });
                     } else {
                         mModel.cartAction(mContext, I.ACTION_CART_UPDATE, String.valueOf(bean.getId()), null,
-                                null, bean.getCount()-1, new OnCompleteListener<MessageBean>() {
+                                null, bean.getCount() - 1, new OnCompleteListener<MessageBean>() {
                                     @Override
                                     public void onSuccess(MessageBean result) {
                                         if (result != null && result.isSuccess()) {
-                                            bean.setCount(bean.getCount()-1);
-                                            mTvCartCount.setText("("+bean.getCount()+")");
+                                            bean.setCount(bean.getCount() - 1);
+                                            mTvCartCount.setText("(" + bean.getCount() + ")");
                                             notifyDataSetChanged();
                                         }
                                     }
