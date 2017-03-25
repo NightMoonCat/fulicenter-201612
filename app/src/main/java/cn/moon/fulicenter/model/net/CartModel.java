@@ -29,9 +29,9 @@ public class CartModel implements ICartModel {
             addCart(utils,userName,goodsId,count,listener);
         }
         if (action == I.ACTION_CART_DEL) {
-            deleteCart(utils, goodsId, userName, listener);
+            deleteCart(utils, cartId, listener);
         }
-        if (action == I.ACTION_CART_UPDATA) {
+        if (action == I.ACTION_CART_UPDATE) {
             updateCart(utils, cartId, count, listener);
         }
 
@@ -41,17 +41,15 @@ public class CartModel implements ICartModel {
                             int count, OnCompleteListener<MessageBean> listener) {
         utils.setRequestUrl(I.REQUEST_UPDATE_CART)
                 .addParam(I.Cart.ID,cartId)
-                .addParam(I.Cart.COUNT,String.valueOf(1))
+                .addParam(I.Cart.COUNT,String.valueOf(count))
                 .targetClass(MessageBean.class)
                 .execute(listener);
     }
 
-    private void deleteCart(OkHttpUtils<MessageBean> utils, String goodsId,
-                            String userName,
+    private void deleteCart(OkHttpUtils<MessageBean> utils, String cartId,
                             OnCompleteListener<MessageBean> listener) {
         utils.setRequestUrl(I.REQUEST_DELETE_CART)
-                .addParam(I.Cart.USER_NAME,userName)
-                .addParam(I.Cart.GOODS_ID,goodsId)
+                .addParam(I.Cart.ID,cartId)
                 .targetClass(MessageBean.class)
                 .execute(listener);
     }

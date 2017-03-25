@@ -63,7 +63,7 @@ public interface I {
     String BROADCAST_UPDATA_COLLECT = "cn.ucai.fulicenter.update.collect";
     int ACTION_CART_ADD = 1;
     int ACTION_CART_DEL = 2;
-    int ACTION_CART_UPDATA = 3;
+    int ACTION_CART_UPDATE = 3;
 
     interface Goods {
         String KEY_RESULT = "result";
