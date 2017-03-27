@@ -137,11 +137,14 @@ public class CartFragment extends Fragment {
     private void updateCartListView(int position, int count) {
         if (mList.get(position).getCount() + count == 0) {
             mList.remove(position);
+            mAdapter.notifyItemRemoved(position);
+            mAdapter.notifyItemRangeChanged(position,mList.size()-position-1);
         } else {
             mList.get(position).setCount(mList.get(position).getCount() + count);
+            mAdapter.notifyItemChanged(position);
         }
+//        mAdapter.notifyDataSetChanged();
         setCartListLayout(!mList.isEmpty());
-        mAdapter.notifyDataSetChanged();
         setPriceText();
     }
 
