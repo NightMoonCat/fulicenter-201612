@@ -15,15 +15,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.moon.fulicenter.R;
 import cn.moon.fulicenter.application.FuLiCenterApplication;
-import cn.moon.fulicenter.application.I;
 import cn.moon.fulicenter.model.bean.CartBean;
 import cn.moon.fulicenter.model.bean.GoodsDetailsBean;
-import cn.moon.fulicenter.model.bean.MessageBean;
 import cn.moon.fulicenter.model.bean.User;
 import cn.moon.fulicenter.model.net.CartModel;
 import cn.moon.fulicenter.model.net.ICartModel;
-import cn.moon.fulicenter.model.net.OnCompleteListener;
-import cn.moon.fulicenter.model.utils.CommonUtils;
 import cn.moon.fulicenter.model.utils.ImageLoader;
 import cn.moon.fulicenter.ui.view.MFGT;
 
@@ -34,9 +30,19 @@ import cn.moon.fulicenter.ui.view.MFGT;
 public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     Context mContext;
     List<CartBean> mList;
-    CompoundButton.OnCheckedChangeListener mListener;
     User mUser;
     ICartModel mModel;
+    CompoundButton.OnCheckedChangeListener mOnCheckedListener;
+    View.OnClickListener mOnClickAddListener;
+    View.OnClickListener mOnClickDelListener;
+
+    public void setOnClickDelListener(View.OnClickListener onClickDelListener) {
+        mOnClickDelListener = onClickDelListener;
+    }
+
+    public void setOnClickAddListener(View.OnClickListener onClickListener) {
+        mOnClickAddListener = onClickListener;
+    }
 
     public CartAdapter(Context mContext, List<CartBean> mList) {
         this.mContext = mContext;
@@ -63,8 +69,8 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return mList != null ? mList.size() : 0;
     }
 
-    public void setListener(CompoundButton.OnCheckedChangeListener listener) {
-        mListener = listener;
+    public void setCheckedChangeListener(CompoundButton.OnCheckedChangeListener listener) {
+        mOnCheckedListener = listener;
     }
 
 
@@ -89,10 +95,6 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             ButterKnife.bind(this, view);
         }
 
-        private int getPrice(String p) {
-            String pStr = p.substring(p.indexOf("￥") + 1);
-            return Integer.valueOf(pStr);
-        }
 
         public void bind(final int position) {
             mUser = FuLiCenterApplication.getCurrentUser();
@@ -105,88 +107,64 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             if (goods != null) {
                 mTvCartGoodName.setText(goods.getGoodsName());
                 ImageLoader.downloadImg(mContext, mIvCartThumb, goods.getGoodsThumb());
-                mTvCartPrice.setText("￥" + getPrice(goods.getCurrencyPrice()) * bean.getCount());
+                mTvCartPrice.setText( goods.getCurrencyPrice()+"");
             }
-            mCbCartSelected.setTag(position);
+
             //将OnCheckedChangeListener的listener对象从CartFragment传到适配器CartAdapter,再传到viewHolder
-            mCbCartSelected.setOnCheckedChangeListener(mListener);
+            mCbCartSelected.setTag(position);
+            mCbCartSelected.setOnCheckedChangeListener(mOnCheckedListener);
 
             mIvCartThumb.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    MFGT.gotoGoodsDetails(mContext,bean.getGoodsId());
+                    MFGT.gotoGoodsDetails(mContext, bean.getGoodsId());
                 }
             });
 
-            mIvCartAdd.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    updateAddCart();
-                }
-
-                private void updateAddCart() {
-                    mModel.cartAction(mContext, I.ACTION_CART_UPDATE, String.valueOf(bean.getId()), null,
-                            null, bean.getCount() + 1, new OnCompleteListener<MessageBean>() {
-                                @Override
-                                public void onSuccess(MessageBean result) {
-                                    if (result != null && result.isSuccess()) {
-                                        bean.setCount(bean.getCount() + 1);
-                                        mTvCartCount.setText("(" + bean.getCount() + ")");
-                                        notifyDataSetChanged();
-                                    }
-                                }
-
-                                @Override
-                                public void onError(String error) {
-                                    CommonUtils.showShortToast("购物车更新失败");
-                                }
-                            });
-                }
-            });
-            mIvCartDel.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    updateDeleteCart();
-                }
-
-                private void updateDeleteCart() {
-                    if (bean.getCount() == 1) {
-                        mModel.cartAction(mContext, I.ACTION_CART_DEL, String.valueOf(bean.getId()), null, null, 0
-                                , new OnCompleteListener<MessageBean>() {
-                                    @Override
-                                    public void onSuccess(MessageBean result) {
-                                        if (result != null && result.isSuccess()) {
-                                            CommonUtils.showShortToast(result.getMsg());
-                                            mList.remove(position);
-                                            notifyDataSetChanged();
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onError(String error) {
-                                        CommonUtils.showShortToast("删除购物车商品失败");
-                                    }
-                                });
-                    } else {
-                        mModel.cartAction(mContext, I.ACTION_CART_UPDATE, String.valueOf(bean.getId()), null,
-                                null, bean.getCount() - 1, new OnCompleteListener<MessageBean>() {
-                                    @Override
-                                    public void onSuccess(MessageBean result) {
-                                        if (result != null && result.isSuccess()) {
-                                            bean.setCount(bean.getCount() - 1);
-                                            mTvCartCount.setText("(" + bean.getCount() + ")");
-                                            notifyDataSetChanged();
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onError(String error) {
-                                        CommonUtils.showShortToast("购物车更新失败");
-                                    }
-                                });
-                    }
-                }
-            });
+            mIvCartAdd.setTag(position);
+            mIvCartAdd.setOnClickListener(mOnClickAddListener);
+            mIvCartDel.setTag(position);
+            mIvCartDel.setOnClickListener(mOnClickDelListener);
+//
+//
+//                private void updateDeleteCart() {
+//                    if (bean.getCount() == 1) {
+//                        mModel.cartAction(mContext, I.ACTION_CART_DEL, String.valueOf(bean.getId()), null, null, 0
+//                                , new OnCompleteListener<MessageBean>() {
+//                                    @Override
+//                                    public void onSuccess(MessageBean result) {
+//                                        if (result != null && result.isSuccess()) {
+//                                            CommonUtils.showShortToast(result.getMsg());
+//                                            mList.remove(position);
+//                                            notifyDataSetChanged();
+//                                        }
+//                                    }
+//
+//                                    @Override
+//                                    public void onError(String error) {
+//                                        CommonUtils.showShortToast("删除购物车商品失败");
+//                                    }
+//                                });
+//                    } else {
+//                        mModel.cartAction(mContext, I.ACTION_CART_UPDATE, String.valueOf(bean.getId()), null,
+//                                null, bean.getCount() - 1, new OnCompleteListener<MessageBean>() {
+//                                    @Override
+//                                    public void onSuccess(MessageBean result) {
+//                                        if (result != null && result.isSuccess()) {
+//                                            bean.setCount(bean.getCount() - 1);
+//                                            mTvCartCount.setText("(" + bean.getCount() + ")");
+//                                            notifyDataSetChanged();
+//                                        }
+//                                    }
+//
+//                                    @Override
+//                                    public void onError(String error) {
+//                                        CommonUtils.showShortToast("购物车更新失败");
+//                                    }
+//                                });
+//                    }
+//                }
+//            });
         }
     }
 }

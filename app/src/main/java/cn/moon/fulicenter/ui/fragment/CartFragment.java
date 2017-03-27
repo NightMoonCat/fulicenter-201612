@@ -20,8 +20,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.moon.fulicenter.R;
 import cn.moon.fulicenter.application.FuLiCenterApplication;
+import cn.moon.fulicenter.application.I;
 import cn.moon.fulicenter.model.bean.CartBean;
 import cn.moon.fulicenter.model.bean.GoodsDetailsBean;
+import cn.moon.fulicenter.model.bean.MessageBean;
 import cn.moon.fulicenter.model.bean.User;
 import cn.moon.fulicenter.model.net.CartModel;
 import cn.moon.fulicenter.model.net.ICartModel;
@@ -88,9 +90,51 @@ public class CartFragment extends Fragment {
             setPriceText();
         }
     };
+    View.OnClickListener mOnClickDeleteListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            int position = (int) view.getTag();
+            updateCartList(position,-1);
+        }
+    };
+    View.OnClickListener mOnClickAddListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            int position = (int) view.getTag();
+            updateCartList(position,1);
+        }
+    };
+
+    private void updateCartList(final int position, final int count) {
+        CartBean cartBean = mList.get(position);
+        mModel.cartAction(getActivity(), I.ACTION_CART_UPDATE, String.valueOf(cartBean.getId()),
+                null, null, cartBean.getCount() + count, new OnCompleteListener<MessageBean>() {
+                    @Override
+                    public void onSuccess(MessageBean result) {
+                        if (result != null && result.isSuccess()) {
+                            updateCartListView(position, count);
+                        }
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        L.e(TAG,"error = "+error);
+                    }
+                });
+    }
+
+    private void updateCartListView(int position, int count) {
+        mList.get(position).setCount(mList.get(position).getCount()+count);
+        mAdapter.notifyDataSetChanged();
+        setPriceText();
+    }
+
+
     private void setListener() {
         setPullDownListener();
-        mAdapter.setListener(mOnCheckedChangeListener);
+        mAdapter.setCheckedChangeListener(mOnCheckedChangeListener);
+        mAdapter.setOnClickAddListener(mOnClickAddListener);
+        mAdapter.setOnClickDelListener(mOnClickDeleteListener);
     }
 
     private void setPullDownListener() {
