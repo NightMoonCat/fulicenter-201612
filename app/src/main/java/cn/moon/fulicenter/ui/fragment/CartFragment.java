@@ -29,7 +29,6 @@ import cn.moon.fulicenter.model.net.CartModel;
 import cn.moon.fulicenter.model.net.ICartModel;
 import cn.moon.fulicenter.model.net.OnCompleteListener;
 import cn.moon.fulicenter.model.utils.CommonUtils;
-import cn.moon.fulicenter.model.utils.ImageLoader;
 import cn.moon.fulicenter.model.utils.L;
 import cn.moon.fulicenter.model.utils.ResultUtils;
 import cn.moon.fulicenter.ui.adpter.CartAdapter;
@@ -137,13 +136,10 @@ public class CartFragment extends Fragment {
     private void updateCartListView(int position, int count) {
         if (mList.get(position).getCount() + count == 0) {
             mList.remove(position);
-            mAdapter.notifyItemRemoved(position);
-            mAdapter.notifyItemRangeChanged(position,mList.size()-position-1);
         } else {
             mList.get(position).setCount(mList.get(position).getCount() + count);
-            mAdapter.notifyItemChanged(position);
         }
-//        mAdapter.notifyDataSetChanged();
+        mAdapter.notifyDataSetChanged();
         setCartListLayout(!mList.isEmpty());
         setPriceText();
     }
@@ -159,7 +155,6 @@ public class CartFragment extends Fragment {
         mSrl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                ImageLoader.release();
                 setRefresh(true);
                 initData();
             }
@@ -200,7 +195,6 @@ public class CartFragment extends Fragment {
                 if (result != null) {
                     mList.clear();
                     if (result.length > 0) {
-
                         ArrayList<CartBean> cartList = ResultUtils.array2List(result);
                         mList.addAll(cartList);
                         mAdapter.notifyDataSetChanged();

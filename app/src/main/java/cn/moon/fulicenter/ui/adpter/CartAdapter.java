@@ -14,10 +14,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.moon.fulicenter.R;
-import cn.moon.fulicenter.application.FuLiCenterApplication;
 import cn.moon.fulicenter.model.bean.CartBean;
 import cn.moon.fulicenter.model.bean.GoodsDetailsBean;
-import cn.moon.fulicenter.model.bean.User;
 import cn.moon.fulicenter.model.net.CartModel;
 import cn.moon.fulicenter.model.net.ICartModel;
 import cn.moon.fulicenter.model.utils.ImageLoader;
@@ -30,7 +28,6 @@ import cn.moon.fulicenter.ui.view.MFGT;
 public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     Context mContext;
     List<CartBean> mList;
-    User mUser;
     ICartModel mModel;
     CompoundButton.OnCheckedChangeListener mOnCheckedListener;
     View.OnClickListener mOnClickUpdateListener;
@@ -92,7 +89,7 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
         public void bind(final int position) {
-            mUser = FuLiCenterApplication.getCurrentUser();
+            mCbCartSelected.setOnCheckedChangeListener(null);
 
             final CartBean bean = mList.get(position);
             mTvCartCount.setText("(" + bean.getCount() + ")");
