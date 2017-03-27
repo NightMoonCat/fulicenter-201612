@@ -48,4 +48,6 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="goods_details_title">goods details title</string>
+    <item name="cart_add_tag" type="id"/>
+    <item name="cart_del_tag" type="id"/>
 </resources>
