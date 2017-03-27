@@ -22,6 +22,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import cn.moon.fulicenter.R;
 import cn.moon.fulicenter.application.FuLiCenterApplication;
 import cn.moon.fulicenter.application.I;
@@ -36,6 +37,7 @@ import cn.moon.fulicenter.model.utils.CommonUtils;
 import cn.moon.fulicenter.model.utils.L;
 import cn.moon.fulicenter.model.utils.ResultUtils;
 import cn.moon.fulicenter.ui.adpter.CartAdapter;
+import cn.moon.fulicenter.ui.view.MFGT;
 import cn.moon.fulicenter.ui.view.SpaceItemDecoration;
 
 
@@ -63,6 +65,9 @@ public class CartFragment extends Fragment {
     User mUser;
     @BindView(R.id.layout_cart)
     RelativeLayout mLayoutCart;
+
+    int sumPrice = 0;
+    int rankPrice = 0;
 
     MyBroadcastReceiver mUpdateReceiver;
     public CartFragment() {
@@ -243,8 +248,8 @@ public class CartFragment extends Fragment {
     }
 
     private void setPriceText() {
-        int sumPrice = 0;
-        int rankPrice = 0;
+        sumPrice = 0;
+        rankPrice = 0;
         for (CartBean cartBean : mList) {
             if (cartBean.isChecked()) {
                 GoodsDetailsBean goods = cartBean.getGoods();
@@ -263,5 +268,14 @@ public class CartFragment extends Fragment {
         String pStr = p.substring(p.indexOf("￥") + 1);
         return Integer.valueOf(pStr);
     }
+    @OnClick(R.id.tv_cart_buy)
+    public void buy() {
+        if (sumPrice > 0) {
+            MFGT.gotoOrder(getActivity(), rankPrice);
+        } else {
+            CommonUtils.showShortToast(R.string.order_nothing);
+        }
+    }
+
 
 }

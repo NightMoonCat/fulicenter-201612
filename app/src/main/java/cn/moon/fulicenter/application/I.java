@@ -64,6 +64,7 @@ public interface I {
     int ACTION_CART_ADD = 1;
     int ACTION_CART_DEL = 2;
     int ACTION_CART_UPDATE = 3;
+    String ORDER_BUY_PRICE = "cn.moon.fulicenter.order.buy.price" ;
 
     interface Goods {
         String KEY_RESULT = "result";
