@@ -125,46 +125,6 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mIvCartAdd.setOnClickListener(mOnClickAddListener);
             mIvCartDel.setTag(position);
             mIvCartDel.setOnClickListener(mOnClickDelListener);
-//
-//
-//                private void updateDeleteCart() {
-//                    if (bean.getCount() == 1) {
-//                        mModel.cartAction(mContext, I.ACTION_CART_DEL, String.valueOf(bean.getId()), null, null, 0
-//                                , new OnCompleteListener<MessageBean>() {
-//                                    @Override
-//                                    public void onSuccess(MessageBean result) {
-//                                        if (result != null && result.isSuccess()) {
-//                                            CommonUtils.showShortToast(result.getMsg());
-//                                            mList.remove(position);
-//                                            notifyDataSetChanged();
-//                                        }
-//                                    }
-//
-//                                    @Override
-//                                    public void onError(String error) {
-//                                        CommonUtils.showShortToast("删除购物车商品失败");
-//                                    }
-//                                });
-//                    } else {
-//                        mModel.cartAction(mContext, I.ACTION_CART_UPDATE, String.valueOf(bean.getId()), null,
-//                                null, bean.getCount() - 1, new OnCompleteListener<MessageBean>() {
-//                                    @Override
-//                                    public void onSuccess(MessageBean result) {
-//                                        if (result != null && result.isSuccess()) {
-//                                            bean.setCount(bean.getCount() - 1);
-//                                            mTvCartCount.setText("(" + bean.getCount() + ")");
-//                                            notifyDataSetChanged();
-//                                        }
-//                                    }
-//
-//                                    @Override
-//                                    public void onError(String error) {
-//                                        CommonUtils.showShortToast("购物车更新失败");
-//                                    }
-//                                });
-//                    }
-//                }
-//            });
         }
     }
 }

@@ -28,6 +28,7 @@ import cn.moon.fulicenter.model.bean.User;
 import cn.moon.fulicenter.model.net.CartModel;
 import cn.moon.fulicenter.model.net.ICartModel;
 import cn.moon.fulicenter.model.net.OnCompleteListener;
+import cn.moon.fulicenter.model.utils.CommonUtils;
 import cn.moon.fulicenter.model.utils.ImageLoader;
 import cn.moon.fulicenter.model.utils.L;
 import cn.moon.fulicenter.model.utils.ResultUtils;
@@ -107,20 +108,43 @@ public class CartFragment extends Fragment {
 
     private void updateCartList(final int position, final int count) {
         CartBean cartBean = mList.get(position);
-        mModel.cartAction(getActivity(), I.ACTION_CART_UPDATE, String.valueOf(cartBean.getId()),
-                null, null, cartBean.getCount() + count, new OnCompleteListener<MessageBean>() {
-                    @Override
-                    public void onSuccess(MessageBean result) {
-                        if (result != null && result.isSuccess()) {
-                            updateCartListView(position, count);
-                        }
-                    }
+        if (cartBean != null) {
 
-                    @Override
-                    public void onError(String error) {
-                        L.e(TAG,"error = "+error);
-                    }
-                });
+            if (cartBean.getCount() == 1 && count < 0) {
+                mModel.cartAction(getActivity(), I.ACTION_CART_DEL, String.valueOf(cartBean.getId()), null, null, 0
+                        , new OnCompleteListener<MessageBean>() {
+                            @Override
+                            public void onSuccess(MessageBean result) {
+                                if (result != null && result.isSuccess()) {
+                                    mList.remove(position);
+                                    mAdapter.notifyDataSetChanged();
+                                    setPriceText();
+                                    CommonUtils.showShortToast(result.getMsg());
+                                }
+                            }
+
+                            @Override
+                            public void onError(String error) {
+                                CommonUtils.showShortToast("删除购物车商品失败");
+                            }
+                        });
+            }
+            mModel.cartAction(getActivity(), I.ACTION_CART_UPDATE, String.valueOf(cartBean.getId()),
+                    null, null, cartBean.getCount() + count, new OnCompleteListener<MessageBean>() {
+                        @Override
+                        public void onSuccess(MessageBean result) {
+                            if (result != null && result.isSuccess()) {
+                                updateCartListView(position, count);
+                            }
+                        }
+
+                        @Override
+                        public void onError(String error) {
+                            L.e(TAG,"error = "+error);
+                        }
+                    });
+        }
+
     }
 
     private void updateCartListView(int position, int count) {
