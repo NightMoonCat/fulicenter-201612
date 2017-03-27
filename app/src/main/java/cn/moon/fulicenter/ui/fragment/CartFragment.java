@@ -1,6 +1,10 @@
 package cn.moon.fulicenter.ui.fragment;
 
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -60,6 +64,7 @@ public class CartFragment extends Fragment {
     @BindView(R.id.layout_cart)
     RelativeLayout mLayoutCart;
 
+    MyBroadcastReceiver mUpdateReceiver;
     public CartFragment() {
 
     }
@@ -80,6 +85,24 @@ public class CartFragment extends Fragment {
         initData();
         setListener();
     }
+
+
+    class MyBroadcastReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            initData();
+        }
+    }
+
+    private void setListener() {
+        setPullDownListener();
+        mAdapter.setCheckedChangeListener(mOnCheckedChangeListener);
+        mAdapter.setOnClickDelListener(mOnClickUpdateListener);
+        mUpdateReceiver = new MyBroadcastReceiver();
+        IntentFilter filter = new IntentFilter(I.BROADCAST_UPDATA_CART);
+        getContext().registerReceiver(mUpdateReceiver, filter);
+    }
+
 
     CompoundButton.OnCheckedChangeListener mOnCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
         @Override
@@ -145,11 +168,6 @@ public class CartFragment extends Fragment {
     }
 
 
-    private void setListener() {
-        setPullDownListener();
-        mAdapter.setCheckedChangeListener(mOnCheckedChangeListener);
-        mAdapter.setOnClickDelListener(mOnClickUpdateListener);
-    }
 
     private void setPullDownListener() {
         mSrl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -178,12 +196,6 @@ public class CartFragment extends Fragment {
         if (mUser != null) {
             showCartList();
         }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        initData();
     }
 
     private void showCartList() {
