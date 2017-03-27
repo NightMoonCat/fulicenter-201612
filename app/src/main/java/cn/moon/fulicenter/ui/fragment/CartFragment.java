@@ -192,12 +192,13 @@ public class CartFragment extends Fragment {
             public void onSuccess(CartBean[] result) {
                 setRefresh(false);
                 setCartListLayout(true);
+                mList.clear();
                 if (result != null) {
-                    mList.clear();
                     if (result.length > 0) {
                         ArrayList<CartBean> cartList = ResultUtils.array2List(result);
                         mList.addAll(cartList);
                         mAdapter.notifyDataSetChanged();
+                        setPriceText();
                     } else {
                         setCartListLayout(false);
                     }
