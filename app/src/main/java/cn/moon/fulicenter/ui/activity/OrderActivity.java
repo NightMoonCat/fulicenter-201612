@@ -28,8 +28,6 @@ import cn.moon.fulicenter.application.I;
 import cn.moon.fulicenter.model.utils.L;
 import cn.moon.fulicenter.ui.view.MFGT;
 
-import static android.provider.ContactsContract.CommonDataKinds.Website.URL;
-
 public class OrderActivity extends AppCompatActivity {
     private static final String TAG = "OrderActivity";
 
@@ -48,6 +46,7 @@ public class OrderActivity extends AppCompatActivity {
     @BindView(R.id.tv_order_price)
     TextView mTvOrderPrice;
 
+    String URL = "http://218.244.151.190/demo/charge";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
