@@ -20,7 +20,7 @@ public class FuLiCenterApplication extends Application {
 //            new Thread(new Runnable() {
 //                @Override
 //                public void run() {
-                    currentUser = UserDao.getInstance(instance).getUserInfo(userName);
+            currentUser = UserDao.getInstance(instance).getUserInfo(userName);
 //                }
 //            }).start();
         }

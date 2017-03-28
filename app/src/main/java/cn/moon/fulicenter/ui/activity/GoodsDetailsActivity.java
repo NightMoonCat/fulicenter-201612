@@ -254,5 +254,11 @@ public class GoodsDetailsActivity extends AppCompatActivity {
                     }
                 });
     }
+
+    @OnClick(R.id.iv_good_share)
+    public void onClick() {
+
+    }
+
 }
 
