@@ -5,6 +5,7 @@ import android.app.Application;
 import cn.moon.fulicenter.model.bean.User;
 import cn.moon.fulicenter.model.dao.UserDao;
 import cn.moon.fulicenter.model.utils.SharedPreferencesUtils;
+import cn.sharesdk.framework.ShareSDK;
 
 /**
  * Created by Moon on 2017/3/14.
@@ -39,5 +40,6 @@ public class FuLiCenterApplication extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
+        ShareSDK.initSDK(this);
     }
 }
