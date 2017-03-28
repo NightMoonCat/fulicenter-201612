@@ -40,6 +40,7 @@ public class OrderActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         orderPrice = getIntent().getIntExtra(I.ORDER_BUY_PRICE, 0);
         initView();
+
     }
 
     private void initView() {
