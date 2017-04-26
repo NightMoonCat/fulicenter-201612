@@ -96,4 +96,5 @@ public class MFGT {
         startActivity(activity,new Intent(activity, OrderActivity.class)
                 .putExtra(I.ORDER_BUY_PRICE,price));
     }
+
 }
