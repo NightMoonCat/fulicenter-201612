@@ -19,7 +19,7 @@ import cn.moon.fulicenter.application.I;
 import cn.moon.fulicenter.model.utils.L;
 import cn.moon.fulicenter.ui.fragment.BoutiqueFragment;
 import cn.moon.fulicenter.ui.fragment.CartFragment;
-import cn.moon.fulicenter.ui.fragment.CategoryFragment;
+import cn.moon.fulicenter.ui.fragment.CategoryFragment_Event;
 import cn.moon.fulicenter.ui.fragment.NewGoodsFragment;
 import cn.moon.fulicenter.ui.fragment.PersonalCenterFragment;
 import cn.moon.fulicenter.ui.view.MFGT;
@@ -47,8 +47,10 @@ public class MainActivity extends AppCompatActivity {
     Fragment[] mFragments;
     NewGoodsFragment mNewGoodsFragment;
     BoutiqueFragment mBoutiqueFragment;
-    CategoryFragment mCategoryFragment;
+//    CategoryFragment mCategoryFragment;
     CartFragment mCartFragment;
+    CategoryFragment_Event mCategoryFragment_event;
+
     PersonalCenterFragment mPersonalCenterFragment;
 
     RadioButton[] mRadioButtons;
@@ -63,9 +65,11 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.layout_content, mNewGoodsFragment)
                 .add(R.id.layout_content, mBoutiqueFragment)
-                .add(R.id.layout_content, mCategoryFragment)
+//                .add(R.id.layout_content, mCategoryFragment)
+                .add(R.id.layout_content, mCategoryFragment_event)
                 .hide(mBoutiqueFragment)
-                .hide(mCategoryFragment)
+//                .hide(mCategoryFragment)
+                .hide(mCategoryFragment_event)
                 .show(mNewGoodsFragment)
                 .commit();
 
@@ -84,13 +88,15 @@ public class MainActivity extends AppCompatActivity {
         mFragments = new Fragment[5];
         mNewGoodsFragment = new NewGoodsFragment();
         mBoutiqueFragment = new BoutiqueFragment();
-        mCategoryFragment = new CategoryFragment();
+//        mCategoryFragment = new CategoryFragment();
+        mCategoryFragment_event = new CategoryFragment_Event();
         mPersonalCenterFragment = new PersonalCenterFragment();
         mCartFragment = new CartFragment();
 
         mFragments[0] = mNewGoodsFragment;
         mFragments[1] = mBoutiqueFragment;
-        mFragments[2] = mCategoryFragment;
+//        mFragments[2] = mCategoryFragment;
+        mFragments[2] = mCategoryFragment_event;
         mFragments[3] = mCartFragment;
         mFragments[4] = mPersonalCenterFragment;
 
